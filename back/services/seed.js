@@ -97,14 +97,16 @@ async function seedTransactions() {
   await prisma.message.create({
     data: {
       content: "Salut, veux-tu échanger ?",
-      transactionId: transaction.id,
+      transaction: { connect: { id: transaction.id } },
+      user: { connect: { id: 1 } }
     },
   });
 
   await prisma.message.create({
     data: {
       content: "Oui, je suis partant !",
-      transactionId: transaction.id,
+      transaction: { connect: { id: transaction.id } },
+      user: { connect: { id: 2 } }
     },
   });
 
