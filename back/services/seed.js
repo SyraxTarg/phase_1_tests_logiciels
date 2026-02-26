@@ -10,12 +10,14 @@ async function hashPassword(password) {
 }
 
 async function seedUsers() {
-  const users = [
-    { username: "Alice", password: await hashPassword("password123") },
-    { username: "Toto", password: await hashPassword("password456") }
-  ];
+    console.log("Modèles disponibles dans Prisma :", Object.keys(prisma).filter(k => !k.startsWith('_')));
+    await prisma.user.create({
+    data: { username: "Alice", password: await hashPassword("password123") },
+    });
 
-  await prisma.user.createMany({ data: users});
+    await prisma.user.create({
+    data: { username: "Toto", password: await hashPassword("password456") },
+    });
   console.log("Utilisateurs seedés avec succès !");
 }
 
@@ -43,7 +45,70 @@ async function seedCards() {
     }
   });
 
+  await prisma.card.create({
+    data: {
+      name: "Salamèche",
+      description: "Pokémon lézard",
+      type: "Feu",
+      pv: 60,
+      image: "https://www.cards-capital.com/88916/salameche.jpg",
+      user: { connect: { id: 2 } }
+    }
+  });
+
+  await prisma.card.create({
+    data: {
+      name: "Trompignon",
+      description: "Pokémon champignon",
+      type: "Plante",
+      pv: 40,
+      image: "https://www.cards-capital.com/33387/trompignon.jpg",
+      user: { connect: { id: 2 } }
+    }
+  });
+
   console.log("Cartes seedées avec succès !");
 }
 
-module.exports = { seedUsers, seedCards };
+
+async function seedTransactions() {
+
+  const transaction = await prisma.transaction.create({
+    data: {
+      proposerId: 1,
+      receiverId: 2,
+
+      cardsExchange: {
+        create: [
+          { cardId: 1 },
+          { cardId: 2 },
+        ],
+      },
+
+      cardsReceive: {
+        create: [
+          { cardId: 3 },
+          { cardId: 4 },
+        ],
+      },
+    },
+  });
+
+  await prisma.message.create({
+    data: {
+      content: "Salut, veux-tu échanger ?",
+      transactionId: transaction.id,
+    },
+  });
+
+  await prisma.message.create({
+    data: {
+      content: "Oui, je suis partant !",
+      transactionId: transaction.id,
+    },
+  });
+
+  console.log("Transactions et messages seedés !");
+}
+
+module.exports = { seedUsers, seedCards, seedTransactions };
