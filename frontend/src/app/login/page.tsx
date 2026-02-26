@@ -2,8 +2,11 @@
 
 import { login } from "@/src/lib/auth";
 import { useState, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -16,7 +19,7 @@ export default function LoginPage() {
 
     try {
       await login(username, password);
-      alert("Connexion réussie !");
+      router.push("/");
     } catch (error) {
       setError("Identifiants incorrects.");
     } finally {

@@ -21,7 +21,7 @@ export async function saveAccessTokenInCookies(token: string) {
 export async function login(username: string, password: string) {
   try {
     const data = await fetchData(
-      `/login`,
+      `/auth/login`,
       "POST",
       JSON.stringify({ username, password }),
     );
