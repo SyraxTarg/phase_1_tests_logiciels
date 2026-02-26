@@ -21,7 +21,7 @@ export default async function UsersPage() {
           <ul className="divide-y divide-slate-100">
             {users.map((user) => (
               <li
-                key={user.username}
+                key={user.id}
                 className="group flex items-center justify-between p-6 transition-all hover:bg-slate-50/50"
               >
                 <div className="flex items-center gap-4">
@@ -36,7 +36,7 @@ export default async function UsersPage() {
                 </div>
 
                 <Link
-                  href={`/profile/${user.username}`}
+                  href={`/profile/${user.id}`}
                   className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all focus:outline-none focus:ring-4 focus:ring-indigo-500/30 shadow-sm shadow-indigo-200 inline-block"
                 >
                   Voir le Deck
