@@ -56,7 +56,7 @@ const createNewTransaction = async (req, res) => {
 };
 
 const getTransactionsByProposer = async (req, res) => {
-  const proposerId = req.user_id;
+  const proposerId = parseInt(req.params.user_id, 10);
 
   try {
     const transactions = await findTransactionByProposerId(proposerId);
