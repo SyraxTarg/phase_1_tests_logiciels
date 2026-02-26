@@ -1,12 +1,15 @@
 const express = require('express');
 
-const { seedUsers } = require('./services/seed');
+// const { seedUsers } = require('./services/seed');
 
 const app = express();
 app.use(express.json());
 // seedUsers().catch(console.error);
 
 const authRouter = require('./routes/auth');
+const userRouter = require('./routes/user');
+
+app.use('/users', userRouter);
 app.use('/auth', authRouter);
 
 
