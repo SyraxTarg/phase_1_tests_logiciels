@@ -32,7 +32,7 @@ async function createTransaction(proposerId, receiverId, proposerCardIds, receiv
       receiver: true,  
       cardsExchange: { include: { card: true } },
       cardsReceive: { include: { card: true } },
-      messages: true
+      messages: {include: { user: true }}
     }
   });
 

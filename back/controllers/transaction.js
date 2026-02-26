@@ -45,6 +45,19 @@ const createNewTransaction = async (req, res) => {
       cardsReceiveFormatted.push(cardWithUser);
     }
 
+    let messages = [];
+    for (const item of transaction.messages) {
+      const user = await findUserById(item.userId);
+
+      const messageWithUser = {
+        ...item,
+        user: user
+      };
+
+      messages.push(messageWithUser);
+    }
+
+    transaction.messages = messages;
     transaction.cardsExchange = cardsExchangeFormatted;
     transaction.cardsReceive = cardsReceiveFormatted;
 
@@ -86,6 +99,19 @@ const getTransactionsByProposer = async (req, res) => {
         cardsReceiveFormatted.push(cardWithUser);
         }
 
+        let messages = [];
+        for (const item of transaction.messages) {
+        const user = await findUserById(item.userId);
+
+        const messageWithUser = {
+            ...item,
+            user: user
+        };
+
+        messages.push(messageWithUser);
+        }
+
+        transaction.messages = messages;
         transaction.cardsExchange = cardsExchangeFormatted;
         transaction.cardsReceive = cardsReceiveFormatted;
     }

@@ -4,6 +4,7 @@ const {userDto} = require('./findUser');
 function transactionDto(transaction) {
   return {
     id: transaction.id,
+    status: transaction.status,
     proposer: userDto(transaction.proposer),
     receiver: userDto(transaction.receiver),
     cardsExchange: cardsDto(transaction.cardsExchange),
