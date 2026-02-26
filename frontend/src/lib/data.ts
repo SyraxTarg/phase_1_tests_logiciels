@@ -30,11 +30,11 @@ export async function getCardsByUserId(id: number) {
 
 export async function getUserById(id: number) {
   try {
-    // const data = await fetchData(
-    //   `/users/${id}`,
-    //   "GET",
-    // );
-    return {username: "Alice"};
+    const data = await fetchData(
+      `/users/${id}`,
+      "GET",
+    );
+    return data;
   } catch (error) {
     console.error("Failed to fetch :", error);
     return null;
