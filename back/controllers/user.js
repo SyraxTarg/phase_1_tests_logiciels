@@ -16,4 +16,12 @@ const getUserById = async (req, res) => {
   res.json(userDto(user));
 };
 
-module.exports = {getAllUsers, getUserById};
+const getCurrentUser = async (req, res) => {
+  const user = await findUserById(1);
+    if (!user) {
+      return res.status(404).json({ error: "Utilisateur non trouvé" });
+    }
+  res.json(userDto(user));
+};
+
+module.exports = {getAllUsers, getUserById, getCurrentUser};
