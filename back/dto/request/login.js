@@ -1,0 +1,8 @@
+function loginDto(user) {
+  return {
+    username: user.username,
+    password: user.password
+  };
+}
+
+module.exports = { loginDto };
