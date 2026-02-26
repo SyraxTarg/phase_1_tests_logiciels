@@ -10,7 +10,6 @@ async function hashPassword(password) {
 }
 
 async function seedUsers() {
-    console.log("Modèles disponibles dans Prisma :", Object.keys(prisma).filter(k => !k.startsWith('_')));
     await prisma.user.create({
     data: { username: "Alice", password: await hashPassword("password123") },
     });
@@ -22,7 +21,6 @@ async function seedUsers() {
 }
 
 async function seedCards() {
-    console.log("Modèles disponibles dans Prisma :", Object.keys(prisma).filter(k => !k.startsWith('_')));
   await prisma.card.create({
     data: {
       name: "Pikachu",

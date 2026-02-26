@@ -1,7 +1,6 @@
 const {userDto} = require('./findUser');
 
 function cardDto(card) {
-  console.log("Card user:", card.user);
   return {
     id: card.id,
     name: card.name,
