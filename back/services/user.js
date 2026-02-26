@@ -10,6 +10,11 @@ async function findAllUsers() {
   return prisma.user.findMany();
 }
 
+async function findUserById(id) {
+  return prisma.user.findUnique({ where: { id } });
+}
+
 module.exports = {
-  findAllUsers
+  findAllUsers,
+  findUserById
 };

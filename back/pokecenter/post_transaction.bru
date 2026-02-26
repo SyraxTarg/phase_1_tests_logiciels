@@ -1,0 +1,21 @@
+meta {
+  name: login
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/transactions/
+  body: json
+  auth: bearer
+}
+
+body:json {
+  {
+    "proposerId": 1,
+    "receiverId": 2,
+    "proposerCardIds": [1,2],
+    "receiverCardIds": [3,4],
+    "messageContent": "toto"
+    }
+}
