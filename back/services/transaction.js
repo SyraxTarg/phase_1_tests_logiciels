@@ -55,4 +55,27 @@ async function findTransactionByProposerId(proposerId) {
   });
 }
 
-module.exports = { createTransaction, findTransactionByProposerId };
+
+async function findTransactionById(transactionId) {
+  return prisma.transaction.findUnique({
+    where: {
+      id: transactionId
+    },
+    include: {
+      proposer: true,
+      receiver: true,
+      cardsExchange: { include: { card: true } },
+      cardsReceive: { include: { card: true } },
+      messages: true
+    }
+  });
+}
+
+async function changeTransactionStatus(transactionId, newStatus) {
+  return await prisma.transaction.update({
+    where: { id: transactionId },
+    data: { status: newStatus }
+  });
+}
+
+module.exports = { createTransaction, findTransactionByProposerId, changeTransactionStatus, findTransactionById };
