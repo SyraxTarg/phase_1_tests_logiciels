@@ -15,8 +15,8 @@ async function createTransaction(proposerId, receiverId, proposerCardIds, receiv
 
   const transaction = await prisma.transaction.create({
     data: {
-      proposer: { connect: { id: proposerId } },   
-      receiver: { connect: { id: receiverId } },   
+      proposer: { connect: { id: proposerId } },
+      receiver: { connect: { id: receiverId } },
       cardsExchange: {
         create: proposerCardIds.map(cardId => ({ card: { connect: { id: cardId } } }))
       },
@@ -24,12 +24,17 @@ async function createTransaction(proposerId, receiverId, proposerCardIds, receiv
         create: receiverCardIds.map(cardId => ({ card: { connect: { id: cardId } } }))
       },
       messages: messageContent
-        ? { create: { content: messageContent } }
-        : undefined
+      ? {
+          create: {
+            content: messageContent,
+            user: { connect: { id: proposerId } }
+          }
+        }
+      : undefined
     },
     include: {
-      proposer: true,  
-      receiver: true,  
+      proposer: true,
+      receiver: true,
       cardsExchange: { include: { card: true } },
       cardsReceive: { include: { card: true } },
       messages: {include: { user: true }}
