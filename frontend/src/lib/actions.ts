@@ -53,7 +53,24 @@ export async function createNewTransaction(payload: TransactionContent) {
         messageContent: payload.messageContent,
       }),
     );
-    return {ok: true}
+    return { ok: true };
+  } catch (error) {
+    throw new Error(`Fetch error: ${String(error)}`);
+  }
+}
+
+export async function patchTransactionStatus(
+  transactionId: number,
+  status: string,
+) {
+  try {
+    const response = await fetchData(
+      `/${transactionId}`,
+      "PATCH",
+      JSON.stringify({ status }),
+    );
+    const transaction = await response.json();
+    return { ok: true, transaction };
   } catch (error) {
     throw new Error(`Fetch error: ${String(error)}`);
   }
