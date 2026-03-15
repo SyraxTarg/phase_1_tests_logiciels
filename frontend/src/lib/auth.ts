@@ -30,3 +30,16 @@ export async function login(username: string, password: string) {
     throw new Error(String(error));
   }
 }
+
+export async function getCurrentUser() {
+  try {
+    const data: { id: number; username: string } = await fetchData(
+      `/users/me`,
+      "GET",
+    );
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch :", error);
+    return null;
+  }
+}

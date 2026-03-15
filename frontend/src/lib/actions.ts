@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-// import { revalidatePath } from "next/cache";
+import { TransactionContent } from "./definitions";
 
 export async function fetchData(
   endpoint: string,
@@ -35,6 +35,25 @@ export async function fetchData(
     }
 
     return await res.text();
+  } catch (error) {
+    throw new Error(`Fetch error: ${String(error)}`);
+  }
+}
+
+export async function createNewTransaction(payload: TransactionContent) {
+  try {
+    await fetchData(
+      `/transactions/`,
+      "POST",
+      JSON.stringify({
+        proposerId: payload.proposerId,
+        receiverId: payload.receiverId,
+        proposerCardIds: payload.proposerCardIds,
+        receiverCardIds: payload.receiverCardIds,
+        messageContent: payload.messageContent,
+      }),
+    );
+    return {ok: true}
   } catch (error) {
     throw new Error(`Fetch error: ${String(error)}`);
   }
