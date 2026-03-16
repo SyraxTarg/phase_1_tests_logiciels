@@ -18,12 +18,12 @@ async function findCardsByUserId(userId) {
 }
 
 
-async function findCardsByName(name) {
+async function findCards(name, type) {
   return prisma.card.findMany({
     where: {
-      name: {
-        contains: name
-      },
+      name: name ? { contains: name } : undefined,
+
+      type: type ?? undefined
     },
     include: {
       user: true
@@ -33,5 +33,5 @@ async function findCardsByName(name) {
 
 module.exports = {
   findCardsByUserId,
-  findCardsByName
+  findCards
 };
