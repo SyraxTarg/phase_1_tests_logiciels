@@ -61,6 +61,21 @@ async function findTransactionByProposerId(proposerId) {
 }
 
 
+async function findTransactionByReceiverId(receiverId) {
+  return prisma.transaction.findMany({
+    where: {
+      receiverId: receiverId
+    },
+    include: {
+      proposer: true,
+      receiver: true,
+      cardsExchange: { include: { card: true } },
+      cardsReceive: { include: { card: true } },
+      messages: true
+    }
+  });
+}
+
 async function findTransactionById(transactionId) {
   return prisma.transaction.findUnique({
     where: {
@@ -83,4 +98,10 @@ async function changeTransactionStatus(transactionId, newStatus) {
   });
 }
 
-module.exports = { createTransaction, findTransactionByProposerId, changeTransactionStatus, findTransactionById };
+module.exports = {
+  createTransaction,
+  findTransactionByProposerId,
+  changeTransactionStatus,
+  findTransactionById,
+  findTransactionByReceiverId
+};
