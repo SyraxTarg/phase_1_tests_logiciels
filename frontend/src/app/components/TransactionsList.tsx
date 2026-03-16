@@ -1,15 +1,16 @@
 "use client";
 
-import { patchTransactionStatus } from "@/src/lib/actions";
-import { Transaction } from "@/src/lib/definitions";
+import { patchTransactionStatus, sendMessage } from "@/src/lib/actions";
+import { getCurrentUser } from "@/src/lib/auth";
+import { Transaction, User } from "@/src/lib/definitions";
 import { useState } from "react";
 
 export default function TransactionsList({
   initialTransactions,
-  currentUserId,
+  currentUser,
 }: {
   initialTransactions: Transaction[];
-  currentUserId: number;
+  currentUser: User;
 }) {
   const [activeTab, setActiveTab] = useState<string>("pending");
   const [transactions, setTransactions] =
@@ -42,6 +43,36 @@ export default function TransactionsList({
     } finally {
       setIsLoading(null);
     }
+  };
+
+  const handleSendMessage = async (
+    formData: FormData,
+    transactionId: number,
+  ) => {
+    const message = formData.get("message") as string;
+    if (!message || message.trim() === "") return;
+
+    await sendMessage(transactionId, message);
+
+    setTransactions((prevTransactions) =>
+      prevTransactions.map((tx) => {
+        if (tx.id === transactionId) {
+          return {
+            ...tx,
+            messages: [
+              ...tx.messages,
+              {
+                id: Date.now(),
+                content: message,
+                user: currentUser,
+                timestamp: new Date().toISOString(),
+              },
+            ],
+          };
+        }
+        return tx;
+      }),
+    );
   };
 
   const filteredTransactions = transactions.filter(
@@ -84,7 +115,7 @@ export default function TransactionsList({
           </div>
         ) : (
           filteredTransactions.map((tx) => {
-            const isMyProposal = tx.proposer.id === currentUserId;
+            const isMyProposal = tx.proposer.id === currentUser.id;
             const otherUser = isMyProposal ? tx.receiver : tx.proposer;
 
             return (
@@ -152,24 +183,54 @@ export default function TransactionsList({
                   </div>
                 </div>
 
-                {tx.messages && tx.messages.length > 0 && (
-                  <div className="bg-slate-50 p-4 border-t border-slate-100 text-sm text-slate-600">
-                    <p className="font-semibold mb-2">Derniers messages :</p>
-                    <ul className="space-y-2">
-                      {tx.messages.map((msg) => (
-                        <li
-                          key={msg.id}
-                          className="bg-white p-3 rounded-lg border border-slate-100 shadow-sm"
-                        >
-                          <span className="font-bold text-slate-900">
-                            {msg.user.username}
-                          </span>{" "}
-                          : {msg.content}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                <div className="bg-slate-50 p-4 border-t border-slate-100">
+                  {tx.messages && tx.messages.length > 0 && (
+                    <div className="mb-4 text-sm text-slate-600">
+                      <p className="font-semibold mb-2">
+                        Historique des messages :
+                      </p>
+                      <ul className="space-y-2">
+                        {tx.messages.map((msg) => (
+                          <li
+                            key={msg.id}
+                            className={`p-3 rounded-lg border shadow-sm ${
+                              msg.user.id === currentUser.id
+                                ? "bg-indigo-50 border-indigo-100 ml-8"
+                                : "bg-white border-slate-100 mr-8"
+                            }`}
+                          >
+                            <span className="font-bold text-slate-900 block text-xs mb-1">
+                              {msg.user.username}
+                            </span>
+                            {msg.content}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Formulaire pour un nouveau message (uniquement si en cours) */}
+                  {tx.status === "pending" && (
+                    <form
+                      action={(formData) => handleSendMessage(formData, tx.id)}
+                      className="mt-2 flex gap-2"
+                    >
+                      <input
+                        type="text"
+                        name="message"
+                        placeholder="Écrire un message..."
+                        required
+                        className="flex-1 px-4 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                      />
+                      <button
+                        type="submit"
+                        className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm"
+                      >
+                        Envoyer
+                      </button>
+                    </form>
+                  )}
+                </div>
 
                 {tx.status === "pending" && (
                   <div className="bg-white p-4 border-t border-slate-200 flex justify-end items-center gap-3">

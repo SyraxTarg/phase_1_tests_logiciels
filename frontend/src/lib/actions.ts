@@ -65,12 +65,25 @@ export async function patchTransactionStatus(
 ) {
   try {
     const response = await fetchData(
-      `/${transactionId}`,
+      `/transactions/${transactionId}`,
       "PATCH",
       JSON.stringify({ status }),
     );
     const transaction = await response.json();
     return { ok: true, transaction };
+  } catch (error) {
+    throw new Error(`Fetch error: ${String(error)}`);
+  }
+}
+
+export async function sendMessage(transactionId: number, content: string) {
+  try {
+    await fetchData(
+      `/messages/${transactionId}`,
+      "POST",
+      JSON.stringify({ content }),
+    );
+    return { ok: true };
   } catch (error) {
     throw new Error(`Fetch error: ${String(error)}`);
   }

@@ -31,7 +31,7 @@ export default async function TransactionsPage() {
           </p>
         </header>
 
-        <TransactionsList initialTransactions={transactions} currentUserId={currentUser.id} />
+        <TransactionsList initialTransactions={transactions} currentUser={currentUser} />
       </div>
     </div>
   );
