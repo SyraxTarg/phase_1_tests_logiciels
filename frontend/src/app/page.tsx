@@ -8,13 +8,21 @@ export default async function UsersPage() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans p-8">
       <div className="max-w-4xl mx-auto">
-        <header className="mb-10">
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 mb-2">
-            Communauté de Troc
-          </h1>
-          <p className="text-lg text-slate-500 font-medium">
-            {users.length} dresseurs prêts à échanger
-          </p>
+        <header className="mb-10 flex justify-between">
+          <div>
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 mb-2">
+              Communauté de Troc
+            </h1>
+            <p className="text-lg text-slate-500 font-medium">
+              {users.length} dresseurs prêts à échanger
+            </p>
+          </div>
+          <Link
+            href={`/transactions`}
+            className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all focus:outline-none focus:ring-4 focus:ring-indigo-500/30 shadow-sm shadow-indigo-200 inline-block h-min"
+          >
+            Mes transactions
+          </Link>
         </header>
 
         <div className="bg-white rounded-2xl border border-slate-100 shadow-xl overflow-hidden">

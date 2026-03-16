@@ -1,6 +1,8 @@
 import { Card, User } from "@/src/lib/definitions";
 import { getCardsByUserId, getUserById } from "@/src/lib/data";
 import Link from "next/link";
+import { getCurrentUser } from "@/src/lib/auth";
+import TransactionModal from "../../components/TransactionModal";
 
 export default async function UserProfilePage({
   params,
@@ -11,6 +13,12 @@ export default async function UserProfilePage({
 
   const user: User | null = await getUserById(parseInt(userId));
   const cards: Card[] = await getCardsByUserId(parseInt(userId));
+
+  const currentUser = await getCurrentUser();
+  let myCards: Card[] = [];
+  if (currentUser) {
+    myCards = await getCardsByUserId(currentUser.id);
+  }
 
   if (!user) return;
 
@@ -33,9 +41,14 @@ export default async function UserProfilePage({
             </p>
           </div>
 
-          <button className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all focus:outline-none focus:ring-4 focus:ring-indigo-500/30 shadow-lg shadow-indigo-200">
-            Proposer un échange
-          </button>
+          {currentUser && currentUser.id !== parseInt(userId) && (
+            <TransactionModal
+              receiverId={user.id}
+              receiverCards={cards}
+              proposerId={currentUser.id}
+              proposerCards={myCards}
+            />
+          )}
         </header>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
