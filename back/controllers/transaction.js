@@ -1,5 +1,11 @@
 const { newTransactionDto } = require("../dto/request/newTransaction");
-const { createTransaction, findTransactionByProposerId, changeTransactionStatus, findTransactionById } = require("../services/transaction");
+const {
+  createTransaction,
+  findTransactionByProposerId,
+  changeTransactionStatus,
+  findTransactionById,
+  findTransactionByReceiverId
+} = require("../services/transaction");
 const { transactionDto } = require('../dto/response/transaction');
 const {transactionsDto} = require('../dto/response/transactions');
 const { findUserById } = require('../services/user');
@@ -124,6 +130,62 @@ const getTransactionsByProposer = async (req, res) => {
 };
 
 
+
+const getTransactionsByReceiver = async (req, res) => {
+  const receiverId = parseInt(req.params.user_id, 10);
+
+  try {
+    const transactions = await findTransactionByReceiverId(receiverId);
+
+    for (transaction of transactions) {
+        let cardsExchangeFormatted = [];
+        for (const item of transaction.cardsExchange) {
+        const user = await findUserById(item.card.userId);
+
+        const cardWithUser = {
+            ...item.card,
+            user: user || { username: "Inconnu" }
+        };
+
+        cardsExchangeFormatted.push(cardWithUser);
+        }
+
+        let cardsReceiveFormatted = [];
+        for (const item of transaction.cardsReceive) {
+        const user = await findUserById(item.card.userId);
+
+        const cardWithUser = {
+            ...item.card,
+            user: user || { username: "Inconnu" }
+        };
+
+        cardsReceiveFormatted.push(cardWithUser);
+        }
+
+        let messages = [];
+        for (const item of transaction.messages) {
+        const user = await findUserById(item.userId);
+
+        const messageWithUser = {
+            ...item,
+            user: user
+        };
+
+        messages.push(messageWithUser);
+        }
+
+        transaction.messages = messages;
+        transaction.cardsExchange = cardsExchangeFormatted;
+        transaction.cardsReceive = cardsReceiveFormatted;
+    }
+    res.status(200).json(transactionsDto(transactions));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erreur lors de la récupération des transactions" });
+  }
+};
+
+
 const patchTransactionStatus = async (req, res) => {
   const transactionId = parseInt(req.params.transaction_id, 10);
   const { status } = updateStatusDto(req.body);
@@ -180,4 +242,10 @@ const patchTransactionStatus = async (req, res) => {
   }
 };
 
-module.exports = { createNewTransaction, getTransactionsByProposer, patchTransactionStatus };
+module.exports = {
+  createNewTransaction,
+  getTransactionsByProposer,
+  patchTransactionStatus,
+getTransactionsByReceiver
+}
+;
