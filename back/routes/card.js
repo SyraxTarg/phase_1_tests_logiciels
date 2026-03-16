@@ -3,10 +3,10 @@ const router = express.Router();
 const {authMiddleware} = require('../services/auth');
 const {
     getCardsByUser,
-    getCardsByName
+    getCards
 } = require('../controllers/card');
 
-router.get('/', authMiddleware, getCardsByName);
+router.get('/', authMiddleware, getCards);
 router.get('/:user_id', authMiddleware, getCardsByUser);
 
 module.exports = router;

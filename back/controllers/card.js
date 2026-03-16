@@ -1,6 +1,6 @@
 const {
   findCardsByUserId,
-  findCardsByName
+  findCards
 } = require('../services/card');
 const { cardsDto } = require('../dto/response/findCards');
 
@@ -10,13 +10,14 @@ const getCardsByUser = async (req, res) => {
   res.json(cardsDto(cards));
 };
 
-const getCardsByName = async (req, res) => {
+const getCards = async (req, res) => {
   const card_name = req.query.card_name
-  const cards = await findCardsByName(card_name);
+  const card_type = req.query.card_type
+  const cards = await findCards(name=card_name, type=card_type);
   res.json(cardsDto(cards));
 };
 
 module.exports = {
   getCardsByUser,
-  getCardsByName
+  getCards
 };
