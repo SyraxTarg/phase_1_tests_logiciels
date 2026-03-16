@@ -3,14 +3,16 @@ const {
   createTransaction,
   findTransactionByProposerId,
   changeTransactionStatus,
-  findTransactionById,
   findTransactionByReceiverId
 } = require("../services/transaction");
 const { transactionDto } = require('../dto/response/transaction');
 const {transactionsDto} = require('../dto/response/transactions');
 const { findUserById } = require('../services/user');
 const {updateStatusDto} = require('../dto/request/updateTransactionStatus');
-const { isValidStatus, getValidStatuses } = require('../services/transactionStatus');
+const {
+  isValidStatus,
+  getValidStatuses
+} = require('../services/transactionStatus');
 
 const createNewTransaction = async (req, res) => {
   const { proposerId, receiverId, proposerCardIds, receiverCardIds, messageContent } = newTransactionDto(req.body);
@@ -193,9 +195,8 @@ const patchTransactionStatus = async (req, res) => {
     return res.status(400).json({ error: `Statut de transaction invalide: ${status}. Valeurs autorisées: ${getValidStatuses().join(', ')}` });
   }
   try {
-    await changeTransactionStatus(transactionId, status);
-    const transaction = await findTransactionById(transactionId);
-    // console.log(transaction);
+    const transaction = await changeTransactionStatus(transactionId, status);
+
     let cardsExchangeFormatted = [];
     for (const item of transaction.cardsExchange) {
       const user = await findUserById(item.card.userId);
@@ -211,7 +212,6 @@ const patchTransactionStatus = async (req, res) => {
     let cardsReceiveFormatted = [];
     for (const item of transaction.cardsReceive) {
       const user = await findUserById(item.card.userId);
-
       const cardWithUser = {
         ...item.card,
         user: user || { username: "Inconnu" }
@@ -246,6 +246,6 @@ module.exports = {
   createNewTransaction,
   getTransactionsByProposer,
   patchTransactionStatus,
-getTransactionsByReceiver
+  getTransactionsByReceiver
 }
 ;

@@ -13,6 +13,17 @@ post {
 body:json {
   {
     "username": "Alice",
-    "password": "password123
+    "password": "password123"
+  }
+}
+
+script:post-response {
+  if (res.getStatus() === 200) {
+    const data = res.getBody();
+    
+    if (data.token) {
+      bru.setVar("jwt_token", data.token);
+      console.log("Token sauvegardé !");
+    }
   }
 }

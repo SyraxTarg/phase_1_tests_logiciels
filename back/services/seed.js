@@ -27,6 +27,7 @@ async function seedCards() {
       description: "Pokémon souris",
       type: "Electric",
       pv: 70,
+      masked: false,
       image: "https://static.fnac-static.com/multimedia/Images/FR/MDM/b1/5c/25/19225777/3756-1/tsp20241106022234/Carte-a-collectionner-Pokemon-Carte-Promo-Go-1-Bonus-de-commande-ne-peut-etre-vendu-separement.jpg",
       user: { connect: { id: 1 } }
     }
@@ -38,6 +39,7 @@ async function seedCards() {
       description: "Pokémon mystique",
       type: "Psy",
       pv: 170,
+      masked: false,
       image: "https://www.ultrajeux.com/images/produits/maxi/13583.jpg",
       user: { connect: { id: 1 } }
     }
@@ -49,6 +51,7 @@ async function seedCards() {
       description: "Pokémon lézard",
       type: "Feu",
       pv: 60,
+      masked: false,
       image: "https://www.cards-capital.com/88916/salameche.jpg",
       user: { connect: { id: 2 } }
     }
@@ -60,6 +63,7 @@ async function seedCards() {
       description: "Pokémon champignon",
       type: "Plante",
       pv: 40,
+      masked: false,
       image: "https://www.cards-capital.com/33387/trompignon.jpg",
       user: { connect: { id: 2 } }
     }
