@@ -1,0 +1,15 @@
+meta {
+  name: get transaction by id
+  type: http
+  seq: 10
+}
+
+get {
+  url: http://localhost:3000/transactions/:transaction_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  transaction_id: 
+}

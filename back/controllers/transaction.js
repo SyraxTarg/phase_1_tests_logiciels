@@ -3,7 +3,8 @@ const {
   createTransaction,
   findTransactionByProposerId,
   changeTransactionStatus,
-  findTransactionByReceiverId
+  findTransactionByReceiverId,
+  findTransactionById
 } = require("../services/transaction");
 const { transactionDto } = require('../dto/response/transaction');
 const {transactionsDto} = require('../dto/response/transactions');
@@ -242,10 +243,64 @@ const patchTransactionStatus = async (req, res) => {
   }
 };
 
+
+const getTransactionById = async (req, res) => {
+  const transactionId = parseInt(req.params.transaction_id, 10);
+
+  try {
+    const transaction = await findTransactionById(transactionId);
+
+    let cardsExchangeFormatted = [];
+    for (const item of transaction.cardsExchange) {
+      const user = await findUserById(item.card.userId);
+
+      const cardWithUser = {
+          ...item.card,
+          user: user || { username: "Inconnu" }
+      };
+
+      cardsExchangeFormatted.push(cardWithUser);
+    }
+
+    let cardsReceiveFormatted = [];
+    for (const item of transaction.cardsReceive) {
+      const user = await findUserById(item.card.userId);
+
+      const cardWithUser = {
+        ...item.card,
+        user: user || { username: "Inconnu" }
+      };
+
+      cardsReceiveFormatted.push(cardWithUser);
+    }
+
+    let messages = [];
+    for (const item of transaction.messages) {
+      const user = await findUserById(item.userId);
+
+      const messageWithUser = {
+        ...item,
+        user: user
+      };
+
+      messages.push(messageWithUser);
+    }
+
+    transaction.messages = messages;
+    transaction.cardsExchange = cardsExchangeFormatted;
+    transaction.cardsReceive = cardsReceiveFormatted;
+    res.status(200).json(transactionDto(transaction));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erreur lors de la récupération de la transaction" });
+  }
+};
+
 module.exports = {
   createNewTransaction,
   getTransactionsByProposer,
   patchTransactionStatus,
-  getTransactionsByReceiver
+  getTransactionsByReceiver,
+  getTransactionById
 }
 ;
