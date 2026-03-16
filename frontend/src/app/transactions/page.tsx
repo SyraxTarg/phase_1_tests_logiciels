@@ -1,4 +1,4 @@
-import { getTransactionsByProposer } from "@/src/lib/data";
+import { getTransactionsByProposer, getTransactionsByReceiver } from "@/src/lib/data";
 import TransactionsList from "../components/TransactionsList";
 import Link from "next/link";
 import { Transaction } from "@/src/lib/definitions";
@@ -9,9 +9,12 @@ export default async function TransactionsPage() {
 
   if (!currentUser) return;
 
-  const transactions: Transaction[] = await getTransactionsByProposer(
-    currentUser.id,
-  );
+  const [proposedTransactions, receivedTransactions] = await Promise.all([
+    getTransactionsByProposer(currentUser.id),
+    getTransactionsByReceiver(currentUser.id),
+  ]);
+
+  const allTransactions: Transaction[] = [...proposedTransactions, ...receivedTransactions];
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans p-8">
@@ -24,14 +27,14 @@ export default async function TransactionsPage() {
             ← Retour à l&apos;accueil
           </Link>
           <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">
-            Mes propositions d&apos;échange
+            Mes échanges
           </h1>
           <p className="text-slate-500 mt-2 font-medium">
-            Gère tes transactions en cours et ton historique.
+            Gère les propositions que tu as envoyées et celles que tu as reçues.
           </p>
         </header>
 
-        <TransactionsList initialTransactions={transactions} currentUser={currentUser} />
+        <TransactionsList initialTransactions={allTransactions} currentUser={currentUser} />
       </div>
     </div>
   );

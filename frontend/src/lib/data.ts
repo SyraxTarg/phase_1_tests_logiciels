@@ -45,3 +45,16 @@ export async function getTransactionsByProposer(id: number) {
     return [];
   }
 }
+
+export async function getTransactionsByReceiver(id: number) {
+  try {
+    const data: Transaction[] = await fetchData(
+      `/transactions/receiver/${id}`,
+      "GET",
+    );
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch :", error);
+    return [];
+  }
+}

@@ -64,13 +64,12 @@ export async function patchTransactionStatus(
   status: string,
 ) {
   try {
-    const response = await fetchData(
+    await fetchData(
       `/transactions/${transactionId}`,
       "PATCH",
       JSON.stringify({ status }),
     );
-    const transaction = await response.json();
-    return { ok: true, transaction };
+    return { ok: true };
   } catch (error) {
     throw new Error(`Fetch error: ${String(error)}`);
   }
