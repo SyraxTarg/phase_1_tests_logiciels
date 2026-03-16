@@ -1,6 +1,12 @@
 const { PrismaClient } = require('@prisma/client');
 const { PrismaBetterSqlite3 } = require('@prisma/adapter-better-sqlite3');
 
+const {isAccepted} = require("./transactionStatus")
+const {
+  changeCardUser,
+  setMaskedCard
+} = require("./card")
+
 const prisma = new PrismaClient({
   adapter: new PrismaBetterSqlite3({ url: 'file:./pokecenter.db' })
 });
@@ -92,11 +98,30 @@ async function findTransactionById(transactionId) {
 }
 
 async function changeTransactionStatus(transactionId, newStatus) {
-  return await prisma.transaction.update({
+  await prisma.transaction.update({
     where: { id: transactionId },
     data: { status: newStatus }
   });
+
+    const transaction = await findTransactionById(transactionId);
+
+    for (const item of transaction.cardsExchange) {
+      await changeCardUser(item.card.id, transaction.receiver.id)
+      if (isAccepted(newStatus)) {
+        await setMaskedCard(true, item.card.id);
+      }
+    }
+
+    for (const item of transaction.cardsReceive) {
+      await changeCardUser(item.card.id, transaction.proposer.id)
+      if (isAccepted(newStatus)) {
+        await setMaskedCard(true, item.card.id);
+      }
+    }
+
+    return await findTransactionById(transactionId);
 }
+
 
 module.exports = {
   createTransaction,
