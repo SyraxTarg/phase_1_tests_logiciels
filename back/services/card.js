@@ -6,7 +6,7 @@ const prisma = new PrismaClient({
 });
 
 
-async function findCardByUserId(userId) {
+async function findCardsByUserId(userId) {
   return prisma.card.findMany({
     where: {
       userId: userId
@@ -17,6 +17,21 @@ async function findCardByUserId(userId) {
   });
 }
 
+
+async function findCardsByName(name) {
+  return prisma.card.findMany({
+    where: {
+      name: {
+        contains: name
+      },
+    },
+    include: {
+      user: true
+    }
+  });
+}
+
 module.exports = {
-  findCardByUserId
+  findCardsByUserId,
+  findCardsByName
 };
