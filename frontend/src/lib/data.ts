@@ -62,15 +62,8 @@ export async function getTransactionsByReceiver(id: number) {
 
 export async function getTransactionById(id: number) {
   try {
-    // const data: Transaction = await fetchData(`/transactions/${id}`, "GET");
-    return {
-      id: 3,
-      status: "rejected",
-      proposer: { id: 2, username: "Toto" },
-      receiver: { id: 1, username: "Alice" },
-      cardsExchange: [],
-      cardsReceive: [],
-    };
+    const data: Transaction = await fetchData(`/transactions/${id}`, "GET");
+    return data;
   } catch (error) {
     console.error("Failed to fetch :", error);
     return null;
