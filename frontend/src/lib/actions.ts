@@ -90,11 +90,11 @@ export async function sendMessage(transactionId: number, content: string) {
 
 export async function patchCardVisibility(cardId: number, masked: boolean) {
   try {
-    // await fetchData(
-    //   `/cards/${cardId}`,
-    //   "PATCH",
-    //   JSON.stringify({ masked }),
-    // );
+    await fetchData(
+      `/cards/${cardId}`,
+      "PATCH",
+      JSON.stringify({ is_masked: masked }),
+    );
     return { ok: true };
   } catch (error) {
     throw new Error(`Fetch error: ${String(error)}`);
