@@ -31,12 +31,22 @@ export default async function UsersPage() {
             </p>
           </div>
 
-          <Link
-            href={`/transactions`}
-            className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all focus:outline-none focus:ring-4 focus:ring-indigo-500/30 shadow-sm shadow-indigo-200 inline-block h-min whitespace-nowrap"
-          >
-            Mes transactions
-          </Link>
+          <div className="flex flex-wrap gap-3">
+            {currentUser && (
+              <Link
+                href={`/profile`}
+                className="px-5 py-2.5 bg-white border border-indigo-200 hover:border-indigo-300 hover:bg-indigo-50 text-indigo-700 font-semibold rounded-xl transition-all shadow-sm inline-block h-min whitespace-nowrap"
+              >
+                Gérer mon Deck
+              </Link>
+            )}
+            <Link
+              href={`/transactions`}
+              className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all focus:outline-none focus:ring-4 focus:ring-indigo-500/30 shadow-sm shadow-indigo-200 inline-block h-min whitespace-nowrap"
+            >
+              Mes transactions
+            </Link>
+          </div>
         </header>
 
         <div className="bg-white rounded-2xl border border-slate-100 shadow-xl overflow-hidden">

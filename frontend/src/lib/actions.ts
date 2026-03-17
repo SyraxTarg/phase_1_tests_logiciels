@@ -87,3 +87,16 @@ export async function sendMessage(transactionId: number, content: string) {
     throw new Error(`Fetch error: ${String(error)}`);
   }
 }
+
+export async function patchCardVisibility(cardId: number, masked: boolean) {
+  try {
+    // await fetchData(
+    //   `/cards/${cardId}`,
+    //   "PATCH",
+    //   JSON.stringify({ masked }),
+    // );
+    return { ok: true };
+  } catch (error) {
+    throw new Error(`Fetch error: ${String(error)}`);
+  }
+}
