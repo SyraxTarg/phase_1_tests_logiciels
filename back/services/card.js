@@ -51,11 +51,21 @@ async function setMaskedCard(is_masked, card_id) {
   })
 }
 
+async function findCardById(card_id) {
+  return prisma.card.findUnique({
+    where: {id: card_id},
+    include: {
+      user: true
+    }
+  })
+}
+
 
 
 module.exports = {
   findCardsByUserId,
   findCards,
   changeCardUser,
-  setMaskedCard
+  setMaskedCard,
+  findCardById
 };
