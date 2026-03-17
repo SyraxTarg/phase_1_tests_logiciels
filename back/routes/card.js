@@ -3,10 +3,12 @@ const router = express.Router();
 const {authMiddleware} = require('../services/auth');
 const {
     getCardsByUser,
-    getCards
+    getCards,
+    patchMaskedCard
 } = require('../controllers/card');
 
 router.get('/', authMiddleware, getCards);
 router.get('/:user_id', authMiddleware, getCardsByUser);
+router.patch("/:card_id", authMiddleware, patchMaskedCard)
 
 module.exports = router;

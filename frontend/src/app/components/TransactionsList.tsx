@@ -3,6 +3,7 @@
 import { patchTransactionStatus, sendMessage } from "@/src/lib/actions";
 import { Transaction, User } from "@/src/lib/definitions";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function TransactionsList({
   initialTransactions,
@@ -198,9 +199,22 @@ export default function TransactionsList({
                       {isMyProposal ? "Envoyée" : "Reçue"}
                     </span>
                   </div>
-                  <span className="text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider bg-slate-200 text-slate-700">
-                    {tx.status}
-                  </span>
+                  
+                  <div className="flex items-center gap-4">
+                    <span className="text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider bg-slate-200 text-slate-700">
+                      {tx.status}
+                    </span>
+                    <Link 
+                      href={`/transactions/${tx.id}`}
+                      className={`text-sm font-semibold transition-colors ${
+                        isMyProposal 
+                          ? "text-indigo-600 hover:text-indigo-800" 
+                          : "text-emerald-600 hover:text-emerald-800"
+                      }`}
+                    >
+                      Voir les détails →
+                    </Link>
+                  </div>
                 </div>
 
                 <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-100">
@@ -279,27 +293,25 @@ export default function TransactionsList({
                     </div>
                   )}
 
-                  {tx.status === "pending" && (
-                    <form
-                      id={`form-${tx.id}`}
-                      action={(formData) => handleSendMessage(formData, tx.id)}
-                      className="mt-2 flex gap-2"
+                  <form
+                    id={`form-${tx.id}`}
+                    action={(formData) => handleSendMessage(formData, tx.id)}
+                    className="mt-2 flex gap-2"
+                  >
+                    <input
+                      type="text"
+                      name="message"
+                      placeholder="Écrire un message..."
+                      required
+                      className="flex-1 px-4 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    />
+                    <button
+                      type="submit"
+                      className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm"
                     >
-                      <input
-                        type="text"
-                        name="message"
-                        placeholder="Répondre..."
-                        required
-                        className="flex-1 px-4 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-                      />
-                      <button
-                        type="submit"
-                        className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm"
-                      >
-                        Envoyer
-                      </button>
-                    </form>
-                  )}
+                      Envoyer
+                    </button>
+                  </form>
                 </div>
 
                 {tx.status === "pending" && (

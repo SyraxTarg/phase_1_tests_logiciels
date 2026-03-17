@@ -12,12 +12,16 @@ export default async function UserProfilePage({
   const userId = (await params).id;
 
   const user: User | null = await getUserById(parseInt(userId));
-  const cards: Card[] = await getCardsByUserId(parseInt(userId));
+
+  const allCards: Card[] = await getCardsByUserId(parseInt(userId));
+  const visibleCards = allCards.filter((card) => !card.masked);
 
   const currentUser = await getCurrentUser();
-  let myCards: Card[] = [];
+  let myVisibleCards: Card[] = [];
+
   if (currentUser) {
-    myCards = await getCardsByUserId(currentUser.id);
+    const myAllCards = await getCardsByUserId(currentUser.id);
+    myVisibleCards = myAllCards.filter((card) => !card.masked);
   }
 
   if (!user) return;
@@ -37,22 +41,22 @@ export default async function UserProfilePage({
               Profil de {user.username}
             </h1>
             <p className="text-slate-500 mt-2 font-medium">
-              {cards.length} cartes disponibles au troc
+              {visibleCards.length} cartes disponibles au troc
             </p>
           </div>
 
           {currentUser && currentUser.id !== parseInt(userId) && (
             <TransactionModal
               receiverId={user.id}
-              receiverCards={cards}
+              receiverCards={visibleCards}
               proposerId={currentUser.id}
-              proposerCards={myCards}
+              proposerCards={myVisibleCards}
             />
           )}
         </header>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {cards.map((card) => (
+          {visibleCards.map((card) => (
             <div
               key={card.id}
               className="group bg-white rounded-2xl border border-slate-100 shadow-xl overflow-hidden transition-all hover:-translate-y-2 hover:shadow-2xl"
@@ -91,7 +95,7 @@ export default async function UserProfilePage({
           ))}
         </div>
 
-        {cards.length === 0 && (
+        {visibleCards.length === 0 && (
           <div className="bg-white rounded-2xl border border-slate-100 shadow-xl p-20 text-center">
             <p className="text-slate-500 font-medium">
               Ce dresseur n&apos;a pas encore de cartes à échanger.
