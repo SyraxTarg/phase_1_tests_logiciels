@@ -31,7 +31,31 @@ async function findCards(name, type) {
   });
 }
 
+
+async function changeCardUser(card_id, user_id) {
+  return prisma.card.update({
+    where: {id: card_id},
+    data: {
+      user: {
+        connect: { id: user_id }
+      }}
+  })
+}
+
+async function setMaskedCard(is_masked, card_id) {
+  return prisma.card.update({
+    where: {id: card_id},
+    data: {
+      masked: is_masked
+    }
+  })
+}
+
+
+
 module.exports = {
   findCardsByUserId,
-  findCards
+  findCards,
+  changeCardUser,
+  setMaskedCard
 };

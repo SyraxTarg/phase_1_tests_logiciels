@@ -28,6 +28,7 @@ model Card {
   pv       Int
   image    String
   userId      Int
+  masked     Boolean @default(false)
   user        User  @relation(fields: [userId], references: [id])
   transactionsExchange TransactionCardExchange[]
   transactionsReceive TransactionCardReceive[]

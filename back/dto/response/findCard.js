@@ -7,6 +7,7 @@ function cardDto(card) {
     description: card.description,
     type: card.type,
     pv: card.pv,
+    masked: card.masked,
     image: card.image,
     user: userDto(card.user)
   };
