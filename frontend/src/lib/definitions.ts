@@ -7,6 +7,7 @@ export type Card = {
   id: number;
   name: string;
   description: string;
+  masked: boolean;
   type: string;
   pv: number;
   image: string;
