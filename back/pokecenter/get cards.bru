@@ -5,7 +5,12 @@ meta {
 }
 
 get {
-  url: http://localhost:3000/cards
+  url: http://localhost:3000/cards?card_name=pi
   body: none
   auth: inherit
+}
+
+params:query {
+  card_name: pi
+  ~card_type: Electric
 }
