@@ -43,8 +43,3 @@ Run Playwright tests with command :
 ```bash
 npx playwright test
 ```
-
-If tests fail, you might want to download test browsers :
-```bash
-npx playwright install
-```
