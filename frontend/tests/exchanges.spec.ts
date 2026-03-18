@@ -1,9 +1,16 @@
 import { test, expect } from "@playwright/test";
+import 'dotenv/config';
+
+const URL_PAGE = process.env.URL_PAGE;
+
+if (!URL_PAGE) {
+    throw new Error("L'élément URL_PAGE n'est pas défini dans l'environnement.");
+}
 
 test("exchange 1v1", async ({ page, browserName }) => {
     test.skip(browserName === "webkit", "WebKit session locale instable");
 
-    await page.goto("http://localhost:3000/profile/2");
+    await page.goto(`${URL_PAGE}/profile/2`);
 
     const openModalBtn = page.getByRole("button", { name: "Proposer un échange" });
     await expect(openModalBtn).toBeVisible();
@@ -33,7 +40,7 @@ test("exchange 1v1", async ({ page, browserName }) => {
 test("exchange 2v1", async ({ page, browserName }) => {
     test.skip(browserName === "webkit", "WebKit session locale instable");
 
-    await page.goto("http://localhost:3000/profile/2");
+    await page.goto(`${URL_PAGE}/profile/2`);
 
     const openModalBtn = page.getByRole("button", { name: "Proposer un échange" });
     await expect(openModalBtn).toBeVisible();
@@ -65,7 +72,7 @@ test("exchange 2v1", async ({ page, browserName }) => {
 test("exchange 1v2", async ({ page, browserName }) => {
     test.skip(browserName === "webkit", "WebKit session locale instable");
 
-    await page.goto("http://localhost:3000/profile/2");
+    await page.goto(`${URL_PAGE}/profile/2`);
 
     const openModalBtn = page.getByRole("button", { name: "Proposer un échange" });
     await expect(openModalBtn).toBeVisible();
@@ -99,7 +106,7 @@ test("exchange 1v2", async ({ page, browserName }) => {
 test("exchange 2v2", async ({ page, browserName }) => {
     test.skip(browserName === "webkit", "WebKit session locale instable");
 
-    await page.goto("http://localhost:3000/profile/3");
+    await page.goto(`${URL_PAGE}/profile/3`);
 
     const openModalBtn = page.getByRole("button", { name: "Proposer un échange" });
     await expect(openModalBtn).toBeVisible();
@@ -135,7 +142,7 @@ test("exchange 2v2", async ({ page, browserName }) => {
 test("exchange with message", async ({ page, browserName }) => {
     test.skip(browserName === "webkit", "WebKit session locale instable");
 
-    await page.goto("http://localhost:3000/profile/3");
+    await page.goto(`${URL_PAGE}/profile/3`);
 
     const openModalBtn = page.getByRole("button", { name: "Proposer un échange" });
     await expect(openModalBtn).toBeVisible();
@@ -168,7 +175,7 @@ test("exchange with message", async ({ page, browserName }) => {
 test("exchange 0 select", async ({ page, browserName }) => {
     test.skip(browserName === "webkit", "WebKit session locale instable");
 
-    await page.goto("http://localhost:3000/profile/3");
+    await page.goto(`${URL_PAGE}/profile/3`);
 
     await page.getByRole("button", { name: "Proposer un échange" }).click();
     const modal = page.locator('div.fixed.inset-0');
@@ -186,7 +193,7 @@ test("exchange 0 select", async ({ page, browserName }) => {
 test("exchange 1v0", async ({ page, browserName }) => {
     test.skip(browserName === "webkit", "WebKit session locale instable");
 
-    await page.goto("http://localhost:3000/profile/3");
+    await page.goto(`${URL_PAGE}/profile/3`);
 
     await page.getByRole("button", { name: "Proposer un échange" }).click();
     const modal = page.locator('div.fixed.inset-0');
