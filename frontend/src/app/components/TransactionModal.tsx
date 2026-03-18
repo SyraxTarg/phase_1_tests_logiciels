@@ -188,7 +188,8 @@ export default function TransactionModal({
               {step < 3 ? (
                 <button
                   onClick={() => setStep(step + 1)}
-                  disabled={step === 1 && receiverCardIds.length === 0}
+                  disabled={(step === 1 && receiverCardIds.length === 0)||
+                    (step === 2 && proposerCardIds.length === 0)}
                   className="px-5 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Suivant
