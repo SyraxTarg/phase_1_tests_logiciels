@@ -9,7 +9,7 @@ if (!URL_PAGE) {
 
 test('trigger masked checkbox', async ({ page, browserName }) => {
 
-    test.skip(browserName === 'webkit', 'Webkit a des problèmes de gestion de session en local');
+    // test.skip(browserName === 'webkit', 'Webkit a des problèmes de gestion de session en local');
 
     // Arrange
     await page.goto(`${URL_PAGE}/profile`);

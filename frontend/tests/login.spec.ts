@@ -11,7 +11,7 @@ if (!URL_PAGE) {
 test.use({ storageState: { cookies: [], origins: [] } });
 test('login successful', async ({ page, browserName }) => {
 
-  test.skip(browserName === 'webkit', 'Webkit a des problèmes de gestion de session en local');
+  // test.skip(browserName === 'webkit', 'Webkit a des problèmes de gestion de session en local');
 
   // Arrange
   await page.goto(`${URL_PAGE}/login`);
@@ -31,7 +31,7 @@ test('login successful', async ({ page, browserName }) => {
 
 test('login failed', async ({ page, browserName }) => {
 
-  test.skip(browserName === 'webkit', 'Webkit a des problèmes de gestion de session en local');
+  // test.skip(browserName === 'webkit', 'Webkit a des problèmes de gestion de session en local');
 
   // Arrange
   await page.goto(`${URL_PAGE}/login`);
@@ -45,39 +45,48 @@ test('login failed', async ({ page, browserName }) => {
   await submit_button.click();
 
   // Assert
-  await page.getByText("Identifiants incorrects.")
+  await expect(page.getByText("Identifiants incorrects.")).toBeVisible({ timeout: 7000 });
+  await expect(page).toHaveURL(`${URL_PAGE}/login`);
 });
 
 
 test('login no username', async ({ page, browserName }) => {
 
-  test.skip(browserName === 'webkit', 'Webkit a des problèmes de gestion de session en local');
+  // test.skip(browserName === 'webkit', 'Webkit a des problèmes de gestion de session en local');
 
+  // Arrange
   await page.goto(`${URL_PAGE}/login`);
   const username_textbox = await page.getByRole('textbox', { name: 'Username' });
   const password_textbox = await page.getByRole('textbox', { name: 'Mot de passe' });
   const submit_button = await page.getByRole('button', { name: 'Se connecter' });
 
+  // Act
   await username_textbox.fill('');
   await password_textbox.fill('password123');
-  await submit_button.click();
+  await submit_button.click({force: true});
 
-  await page.getByText("Identifiants incorrects.")
+  // Assert
+  await expect(page.getByText("Identifiants incorrects.")).toBeHidden();
+  await expect(page).toHaveURL(`${URL_PAGE}/login`);
 });
 
 
 test('login no password', async ({ page, browserName }) => {
 
-  test.skip(browserName === 'webkit', 'Webkit a des problèmes de gestion de session en local');
+  // test.skip(browserName === 'webkit', 'Webkit a des problèmes de gestion de session en local');
 
+  // Arrange
   await page.goto(`${URL_PAGE}/login`);
   const username_textbox = await page.getByRole('textbox', { name: 'Username' });
   const password_textbox = await page.getByRole('textbox', { name: 'Mot de passe' });
   const submit_button = await page.getByRole('button', { name: 'Se connecter' });
 
+  // Act
   await username_textbox.fill('Alice');
   await password_textbox.fill('');
   await submit_button.click();
 
-  await page.getByText("Identifiants incorrects.")
+  // Assert
+  await expect(page.getByText("Identifiants incorrects.")).toBeHidden();
+  await expect(page).toHaveURL(`${URL_PAGE}/login`);
 });
