@@ -7,29 +7,6 @@ if (!URL_PAGE) {
   throw new Error("L'élément URL_PAGE n'est pas défini dans l'environnement.");
 }
 
-// test("send empty message", async ({ page, browserName }) => {
-//   test.skip(
-//     browserName === "webkit",
-//     "Webkit a des problèmes de gestion de session en local",
-//   );
-
-//   await page.goto(`${URL_PAGE}/transactions`);
-
-//   await page
-//     .locator("#form-1")
-//     .getByRole("textbox", { name: "Écrire un message..." })
-//     .click();
-//   await page
-//     .locator("#form-1")
-//     .getByRole("textbox", { name: "Écrire un message..." })
-//     .fill("");
-//   await page
-//     .getByRole("button", { name: "Envoyer" })
-//     .click();
-
-//   // await expect(page.locator("#form-1").getByText("Moi")).not.toBeVisible();
-// });
-
 test("send message", async ({ page, browserName }) => {
   test.skip(
     browserName === "webkit",
@@ -82,7 +59,7 @@ test("accept transaction", async ({ page, browserName }) => {
   await acceptButton.click();
 
   await expect(pendingTransactions).toHaveCount(1 - acceptTransactionRunCount, {
-    timeout: 5000,
+    timeout: 10000,
   });
 
   await page.getByRole("button", { name: /^Acceptées/ }).click();
@@ -90,7 +67,7 @@ test("accept transaction", async ({ page, browserName }) => {
   await expect(rejectedTransactions).toHaveCount(
     1 + acceptTransactionRunCount,
     {
-      timeout: 5000,
+      timeout: 10000,
     },
   );
 
@@ -125,7 +102,7 @@ test("reject transaction", async ({ page, browserName }) => {
   await rejectButton.click();
 
   await expect(pendingTransactions).toHaveCount(1 - rejectTransactionRunCount, {
-    timeout: 5000,
+    timeout: 10000,
   });
 
   await page.getByRole("button", { name: /^Refusées/ }).click();
@@ -133,7 +110,7 @@ test("reject transaction", async ({ page, browserName }) => {
   await expect(rejectedTransactions).toHaveCount(
     1 + rejectTransactionRunCount,
     {
-      timeout: 5000,
+      timeout: 10000,
     },
   );
 

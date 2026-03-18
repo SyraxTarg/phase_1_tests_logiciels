@@ -26,4 +26,12 @@ test('trigger masked checkbox', async ({ page, browserName }) => {
         await masked.click();
         await expect(visible).toBeVisible({ timeout: 7000 });
     }
+
+    if (!isVisibleShown) {
+        await visible.click();
+        await expect(masked).toBeVisible({ timeout: 7000 });
+    } else {
+        await masked.click();
+        await expect(visible).toBeVisible({ timeout: 7000 });
+    }
 });
