@@ -106,15 +106,17 @@ async function changeTransactionStatus(transactionId, newStatus) {
     const transaction = await findTransactionById(transactionId);
 
     for (const item of transaction.cardsExchange) {
-      await changeCardUser(item.card.id, transaction.receiver.id)
+
       if (isAccepted(newStatus)) {
+        await changeCardUser(item.card.id, transaction.receiver.id)
         await setMaskedCard(true, item.card.id);
       }
     }
 
     for (const item of transaction.cardsReceive) {
-      await changeCardUser(item.card.id, transaction.proposer.id)
+
       if (isAccepted(newStatus)) {
+        await changeCardUser(item.card.id, transaction.proposer.id)
         await setMaskedCard(true, item.card.id);
       }
     }
