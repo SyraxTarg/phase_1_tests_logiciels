@@ -16,8 +16,8 @@ app.use('/cards', cardRouter);
 app.use('/transactions', transactionRouter);
 app.use('/messages', messageRouter);
 
+const LISTEN_PORT = process.env["LISTEN_PORT"]
 
-
-app.listen(3000, () => {
-  console.log('Serveur lancé sur http://localhost:3000');
+app.listen(LISTEN_PORT, () => {
+  console.log(`Serveur lancé sur http://localhost:${LISTEN_PORT}`);
 });
