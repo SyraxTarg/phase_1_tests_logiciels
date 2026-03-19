@@ -1,4 +1,4 @@
-const { loginUser, authMiddleware } = require("../../../services/auth")
+const { loginUser, authMiddleware } = require("../../../services/read/authRead")
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');

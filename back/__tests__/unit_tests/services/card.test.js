@@ -1,8 +1,5 @@
-const { findCardsByUserId, findCards } = require("../../../services/card")
+const { findCardsByUserId, findCards } = require("../../../services/read/cardRead")
 const { PrismaClient } = require('@prisma/client');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const httpMocks = require('node-mocks-http');
 
 // 1. On mocke les modules
 jest.mock('@prisma/client', () => {
