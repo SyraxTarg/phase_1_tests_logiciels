@@ -23,7 +23,7 @@ jobs:
 
     - name: Install dependencies
       working-directory: ./back
-      run: npm i
+      run: npm ci
 
     - name: Launch unit tests
       working-directory: ./back
@@ -46,12 +46,12 @@ jobs:
 
     - name: Install dependencies
       working-directory: ./frontend
-      run: npm i
+      run: npm ci
 
     - name: Reset database
       working-directory: ./back
       env:
-          DATABASE_URL: sqlite:///./test.db
+          DATABASE_URL: file:./test.db
       run: |
         rm -f test.db
 
@@ -62,6 +62,7 @@ jobs:
     - name: Launch backend
       working-directory: ./back
       run: node index.js &
+
     - name: Launch frontend
       working-directory: ./frontend
       run: |
