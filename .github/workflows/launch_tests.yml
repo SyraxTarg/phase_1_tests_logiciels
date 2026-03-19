@@ -54,7 +54,7 @@ jobs:
           DATABASE_URL: file:./test.db
       run: |
         rm -f test.db
-
+        npm install prisma dotenv
         npx prisma db push
         npx prisma generate
         node ./scripts/seed_db.js
