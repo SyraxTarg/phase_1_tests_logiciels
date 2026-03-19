@@ -51,9 +51,9 @@ jobs:
     - name: Reset database
       working-directory: ./back
       env:
-          DATABASE_URL: file:./test.db
+          DATABASE_URL: file:./pokecenter.db
       run: |
-        rm -f test.db
+        rm -f pokecenter.db
         npm install prisma dotenv
         npx prisma db push
         npx prisma generate
