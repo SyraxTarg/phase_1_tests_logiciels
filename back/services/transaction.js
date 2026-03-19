@@ -5,7 +5,7 @@ const {isAccepted} = require("./transactionStatus")
 const {
   changeCardUser,
   setMaskedCard
-} = require("./card")
+} = require("./write/cardWrite")
 
 const prisma = new PrismaClient({
   adapter: new PrismaBetterSqlite3({ url: 'file:./pokecenter.db' })

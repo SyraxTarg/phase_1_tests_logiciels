@@ -32,25 +32,6 @@ async function findCards(name, type) {
 }
 
 
-async function changeCardUser(card_id, user_id) {
-  return prisma.card.update({
-    where: {id: card_id},
-    data: {
-      user: {
-        connect: { id: user_id }
-      }}
-  })
-}
-
-async function setMaskedCard(is_masked, card_id) {
-  return prisma.card.update({
-    where: {id: card_id},
-    data: {
-      masked: is_masked
-    }
-  })
-}
-
 async function findCardById(card_id) {
   return prisma.card.findUnique({
     where: {id: card_id},
@@ -65,7 +46,5 @@ async function findCardById(card_id) {
 module.exports = {
   findCardsByUserId,
   findCards,
-  changeCardUser,
-  setMaskedCard,
   findCardById
 };

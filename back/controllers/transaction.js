@@ -8,7 +8,7 @@ const {
 } = require("../services/transaction");
 const { transactionDto } = require('../dto/response/transaction');
 const {transactionsDto} = require('../dto/response/transactions');
-const { findUserById } = require('../services/user');
+const { findUserById } = require('../services/read/userRead');
 const {updateStatusDto} = require('../dto/request/updateTransactionStatus');
 const {
   isValidStatus,

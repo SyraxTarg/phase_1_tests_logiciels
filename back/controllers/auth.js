@@ -9,7 +9,7 @@ const login = async (req, res) => {
   if (!username || !password) return res.status(400).json({ error: 'Username et password required' });
 
   const query = new LoginQuery({username, password});
-  const result = await loginHandler.handle(query)
+  const result = await loginHandler.handle(query);
 
   if (!result.success) return res.status(401).json({ error: result.error });
 

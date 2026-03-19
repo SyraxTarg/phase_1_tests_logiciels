@@ -2,7 +2,7 @@ const { messageDto } = require('../dto/response/message');
 const { messagesDto } = require('../dto/response/messages');
 const {newMessageDto} = require('../dto/request/newMessage');
 const { CreateMessageCommand } = require('../commands/messageCommands');
-const { CreateMessageHandler } = require('../commandHandlers/messages');
+const { CreateMessageHandler } = require('../commandHandlers/message');
 const { GetMessagesByTransactionQuery } = require('../queries/messageQueries');
 const { GetMessagesByTransactionHandler } = require('../queryHandlers/messages')
 

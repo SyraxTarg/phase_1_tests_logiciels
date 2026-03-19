@@ -1,11 +1,11 @@
 const { findMessagesByTransaction } = require('../services/read/messageRead');
 
 class GetMessagesByTransactionHandler {
-  async handle(command) {
-    if (!command || !command.transactionId) {
+  async handle(query) {
+    if (!query || !query.transactionId) {
       throw new Error('GetMessagesByTransaction requires transactionId');
     }
-    return await findMessagesByTransaction(command.transactionId);
+    return await findMessagesByTransaction(query.transactionId);
   }
 }
 
