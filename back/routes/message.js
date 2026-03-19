@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {authMiddleware} = require('../services/auth');
+const {authMiddleware} = require('../services/read/authRead');
 const {getMessagesByTransaction, postMessage} = require('../controllers/message');
 
 router.get('/:transaction_id', authMiddleware, getMessagesByTransaction);

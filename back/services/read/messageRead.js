@@ -17,21 +17,6 @@ async function findMessagesByTransaction(transactionId) {
   });
 }
 
-async function createMessage(transactionId, userId, content) {
-  const message = await prisma.message.create({
-    data: {
-      content,
-      transaction: { connect: { id: transactionId } },
-      user: { connect: { id: userId } }
-    },
-    include: {
-      user: true
-    }
-  });
-  return message;
-}
-
 module.exports = {
-  findMessagesByTransaction,
-  createMessage
+  findMessagesByTransaction
 };
