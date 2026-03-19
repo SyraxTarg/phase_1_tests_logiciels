@@ -28,3 +28,49 @@ jobs:
     - name: Launch unit tests
       working-directory: ./back
       run: npm test
+
+
+  functional-tests-front:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: ['22.x']
+
+    steps:
+    - uses: actions/checkout@v5
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: npm i
+
+    - name: Reset database
+      working-directory: ./back
+      env:
+          DATABASE_URL: sqlite:///./test.db
+      run: |
+        rm -f pokecenter.db
+
+        npx prisma db push
+        npx prisma generate
+        node ./scripts/seed_db.js
+
+    - name: Launch backend
+      working-directory: ./back
+      run: node index.js &
+    - name: Launch frontend
+      working-directory: ./frontend
+      run: |
+        npm run build
+        npm run start &
+
+    - name: Wait for app
+      run: npx wait-on http://localhost:3000
+
+    - name: Lauch functionnal tests
+      working-directory: ./frontend
+      run: npx playwright test
