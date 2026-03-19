@@ -136,4 +136,7 @@ jobs:
 
     - name: Run Playwright tests
       working-directory: ./frontend
+      env:
+        API_URL: http://localhost:3001
+        URL_PAGE: http://localhost:3000
       run: npx playwright test
