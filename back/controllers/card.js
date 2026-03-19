@@ -24,7 +24,7 @@ const {
 const getCardsByUser = async (req, res) => {
   const userId = parseInt(req.params.user_id, 10);
 
-  const query = new GetCardsByUserQuery({userId});
+  const query = new GetCardsByUserQuery({user_id: userId});
   const cards = await getCardsByUserHandler.handle(query);
 
   res.json(cardsDto(cards));

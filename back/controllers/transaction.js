@@ -1,19 +1,39 @@
 const { newTransactionDto } = require("../dto/request/newTransaction");
-const {
-  createTransaction,
-  findTransactionByProposerId,
-  changeTransactionStatus,
-  findTransactionByReceiverId,
-  findTransactionById
-} = require("../services/transaction");
 const { transactionDto } = require('../dto/response/transaction');
 const {transactionsDto} = require('../dto/response/transactions');
-const { findUserById } = require('../services/read/userRead');
 const {updateStatusDto} = require('../dto/request/updateTransactionStatus');
 const {
   isValidStatus,
   getValidStatuses
-} = require('../services/transactionStatus');
+} = require('../services/read/transactionStatusRead');
+
+const {
+  CreateTransactionCommand,
+  ChangeTransactionStatusCommand
+} = require("../commands/transactionCommands");
+const {
+  CreateTransactionHandler,
+  ChangeTransactionStatusHandler
+} = require("../commandHandlers/transaction");
+const {
+  GetTransactionsByProposerQuery,
+  GetTransactionsByReceiverQuery,
+  GetTransactionsByIdQuery
+} = require("../queries/transactionQueries");
+const {
+  GetTransactionsByProposerHandler,
+  GetTransactionsByReceiverHandler,
+  GetTransactionsByIdHandler
+} = require("../queryHandlers/transaction");
+const {GetUserByIdQuery} = require("../queries/userQueries");
+const {GetUserByIdHandler} = require("../queryHandlers/user");
+
+const createTransactionHandler = new CreateTransactionHandler();
+const changeTransactionStatusHandler = new ChangeTransactionStatusHandler();
+const getTransactionsByProposerHandler = new GetTransactionsByProposerHandler();
+const getTransactionsByReceiverHandler = new GetTransactionsByReceiverHandler();
+const getTransactionsByIdHandler = new GetTransactionsByIdHandler();
+const getUserByiIdHandler = new GetUserByIdHandler();
 
 const createNewTransaction = async (req, res) => {
   const { proposerId, receiverId, proposerCardIds, receiverCardIds, messageContent } = newTransactionDto(req.body);
@@ -23,18 +43,19 @@ const createNewTransaction = async (req, res) => {
   }
 
   try {
-    const transaction = await createTransaction(
-      proposerId,
+    let message = messageContent;
+    const command = new CreateTransactionCommand({ proposerId,
       receiverId,
       proposerCardIds,
       receiverCardIds,
-      messageContent || null
-    );
+      messageContent: message
+     });
+    const transaction = await createTransactionHandler.handle(command);
 
     let cardsExchangeFormatted = [];
     for (const item of transaction.cardsExchange) {
-      const user = await findUserById(item.card.userId);
-
+      const user_query = new GetUserByIdQuery({user_id: item.card.userId})
+      const user = await getUserByiIdHandler.handle(user_query)
       const cardWithUser = {
         ...item.card,
         user: user || { username: "Inconnu" }
@@ -45,7 +66,8 @@ const createNewTransaction = async (req, res) => {
 
     let cardsReceiveFormatted = [];
     for (const item of transaction.cardsReceive) {
-      const user = await findUserById(item.card.userId);
+      const user_query = new GetUserByIdQuery({user_id: item.card.userId})
+      const user = await getUserByiIdHandler.handle(user_query)
 
       const cardWithUser = {
         ...item.card,
@@ -57,7 +79,8 @@ const createNewTransaction = async (req, res) => {
 
     let messages = [];
     for (const item of transaction.messages) {
-      const user = await findUserById(item.userId);
+      const user_query = new GetUserByIdQuery({user_id: item.userId})
+      const user = await getUserByiIdHandler.handle(user_query)
 
       const messageWithUser = {
         ...item,
@@ -82,12 +105,14 @@ const getTransactionsByProposer = async (req, res) => {
   const proposerId = parseInt(req.params.user_id, 10);
 
   try {
-    const transactions = await findTransactionByProposerId(proposerId);
+    const query = new GetTransactionsByProposerQuery({ proposerId });
+    const transactions = await getTransactionsByProposerHandler.handle(query);
 
     for (transaction of transactions) {
         let cardsExchangeFormatted = [];
         for (const item of transaction.cardsExchange) {
-        const user = await findUserById(item.card.userId);
+        const user_query = new GetUserByIdQuery({user_id: item.card.userId})
+      const user = await getUserByiIdHandler.handle(user_query)
 
         const cardWithUser = {
             ...item.card,
@@ -99,7 +124,8 @@ const getTransactionsByProposer = async (req, res) => {
 
         let cardsReceiveFormatted = [];
         for (const item of transaction.cardsReceive) {
-        const user = await findUserById(item.card.userId);
+          const user_query = new GetUserByIdQuery({user_id: item.card.userId})
+          const user = await getUserByiIdHandler.handle(user_query)
 
         const cardWithUser = {
             ...item.card,
@@ -111,7 +137,8 @@ const getTransactionsByProposer = async (req, res) => {
 
         let messages = [];
         for (const item of transaction.messages) {
-        const user = await findUserById(item.userId);
+          const user_query = new GetUserByIdQuery({user_id: item.userId})
+          const user = await getUserByiIdHandler.handle(user_query)
 
         const messageWithUser = {
             ...item,
@@ -138,12 +165,14 @@ const getTransactionsByReceiver = async (req, res) => {
   const receiverId = parseInt(req.params.user_id, 10);
 
   try {
-    const transactions = await findTransactionByReceiverId(receiverId);
+    const query = new GetTransactionsByReceiverQuery({ receiverId });
+    const transactions = await getTransactionsByReceiverHandler.handle(query);
 
     for (transaction of transactions) {
         let cardsExchangeFormatted = [];
         for (const item of transaction.cardsExchange) {
-        const user = await findUserById(item.card.userId);
+          const user_query = new GetUserByIdQuery({user_id: item.card.userId})
+        const user = await getUserByiIdHandler.handle(user_query)
 
         const cardWithUser = {
             ...item.card,
@@ -155,7 +184,8 @@ const getTransactionsByReceiver = async (req, res) => {
 
         let cardsReceiveFormatted = [];
         for (const item of transaction.cardsReceive) {
-        const user = await findUserById(item.card.userId);
+          const user_query = new GetUserByIdQuery({user_id: item.card.userId})
+        const user = await getUserByiIdHandler.handle(user_query)
 
         const cardWithUser = {
             ...item.card,
@@ -167,7 +197,8 @@ const getTransactionsByReceiver = async (req, res) => {
 
         let messages = [];
         for (const item of transaction.messages) {
-        const user = await findUserById(item.userId);
+          const user_query = new GetUserByIdQuery({user_id: item.userId})
+        const user = await getUserByiIdHandler.handle(user_query)
 
         const messageWithUser = {
             ...item,
@@ -196,11 +227,13 @@ const patchTransactionStatus = async (req, res) => {
     return res.status(400).json({ error: `Statut de transaction invalide: ${status}. Valeurs autorisées: ${getValidStatuses().join(', ')}` });
   }
   try {
-    const transaction = await changeTransactionStatus(transactionId, status);
+    const command = new ChangeTransactionStatusCommand({ transactionId, newStatus: status });
+    const transaction = await changeTransactionStatusHandler.handle(command);
 
     let cardsExchangeFormatted = [];
     for (const item of transaction.cardsExchange) {
-      const user = await findUserById(item.card.userId);
+      const user_query = new GetUserByIdQuery({user_id: item.card.userId})
+      const user = await getUserByiIdHandler.handle(user_query)
 
       const cardWithUser = {
         ...item.card,
@@ -212,7 +245,8 @@ const patchTransactionStatus = async (req, res) => {
 
     let cardsReceiveFormatted = [];
     for (const item of transaction.cardsReceive) {
-      const user = await findUserById(item.card.userId);
+      const user_query = new GetUserByIdQuery({user_id: item.card.userId})
+      const user = await getUserByiIdHandler.handle(user_query)
       const cardWithUser = {
         ...item.card,
         user: user || { username: "Inconnu" }
@@ -223,7 +257,8 @@ const patchTransactionStatus = async (req, res) => {
 
     let messages = [];
     for (const item of transaction.messages) {
-      const user = await findUserById(item.userId);
+      const user_query = new GetUserByIdQuery({user_id: item.userId})
+      const user = await getUserByiIdHandler.handle(user_query)
 
       const messageWithUser = {
         ...item,
@@ -248,11 +283,13 @@ const getTransactionById = async (req, res) => {
   const transactionId = parseInt(req.params.transaction_id, 10);
 
   try {
-    const transaction = await findTransactionById(transactionId);
+    const query = new GetTransactionsByIdQuery({ transactionId });
+    const transaction = await getTransactionsByIdHandler.handle(query);
 
     let cardsExchangeFormatted = [];
     for (const item of transaction.cardsExchange) {
-      const user = await findUserById(item.card.userId);
+      const user_query = new GetUserByIdQuery({user_id: item.card.userId})
+      const user = await getUserByiIdHandler.handle(user_query)
 
       const cardWithUser = {
           ...item.card,
@@ -264,7 +301,8 @@ const getTransactionById = async (req, res) => {
 
     let cardsReceiveFormatted = [];
     for (const item of transaction.cardsReceive) {
-      const user = await findUserById(item.card.userId);
+      const user_query = new GetUserByIdQuery({user_id: item.card.userId})
+      const user = await getUserByiIdHandler.handle(user_query)
 
       const cardWithUser = {
         ...item.card,
@@ -276,7 +314,8 @@ const getTransactionById = async (req, res) => {
 
     let messages = [];
     for (const item of transaction.messages) {
-      const user = await findUserById(item.userId);
+      const user_query = new GetUserByIdQuery({user_id: item.userId})
+      const user = await getUserByiIdHandler.handle(user_query)
 
       const messageWithUser = {
         ...item,

@@ -1,4 +1,4 @@
-const { seedUsers, seedCards, seedTransactions } = require('../services/seed');
+const { seedUsers, seedCards, seedTransactions } = require('../services/write/seedWrite');
 
 async function runSeeds() {
   try {

@@ -1,11 +1,13 @@
 const { PrismaClient } = require('@prisma/client');
 const { PrismaBetterSqlite3 } = require('@prisma/adapter-better-sqlite3');
 
-const {isAccepted} = require("./transactionStatus")
+const {isAccepted} = require("../read/transactionStatusRead")
+const {findTransactionById} = require("../read/transactionRead")
+
 const {
   changeCardUser,
   setMaskedCard
-} = require("./write/cardWrite")
+} = require("./cardWrite")
 
 const prisma = new PrismaClient({
   adapter: new PrismaBetterSqlite3({ url: 'file:./pokecenter.db' })
@@ -51,51 +53,7 @@ async function createTransaction(proposerId, receiverId, proposerCardIds, receiv
   return transaction;
 }
 
-async function findTransactionByProposerId(proposerId) {
-  return prisma.transaction.findMany({
-    where: {
-      proposerId: proposerId
-    },
-    include: {
-      proposer: true,
-      receiver: true,
-      cardsExchange: { include: { card: true } },
-      cardsReceive: { include: { card: true } },
-      messages: true
-    }
-  });
-}
 
-
-async function findTransactionByReceiverId(receiverId) {
-  return prisma.transaction.findMany({
-    where: {
-      receiverId: receiverId
-    },
-    include: {
-      proposer: true,
-      receiver: true,
-      cardsExchange: { include: { card: true } },
-      cardsReceive: { include: { card: true } },
-      messages: true
-    }
-  });
-}
-
-async function findTransactionById(transactionId) {
-  return prisma.transaction.findUnique({
-    where: {
-      id: transactionId
-    },
-    include: {
-      proposer: true,
-      receiver: true,
-      cardsExchange: { include: { card: true } },
-      cardsReceive: { include: { card: true } },
-      messages: true
-    }
-  });
-}
 
 async function changeTransactionStatus(transactionId, newStatus) {
   await prisma.transaction.update({
@@ -125,8 +83,5 @@ async function changeTransactionStatus(transactionId, newStatus) {
 
 module.exports = {
   createTransaction,
-  findTransactionByProposerId,
-  changeTransactionStatus,
-  findTransactionById,
-  findTransactionByReceiverId
+  changeTransactionStatus
 };
