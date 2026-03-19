@@ -71,13 +71,13 @@ jobs:
       working-directory: ./frontend
       env:
         API_URL: http://localhost:3001
-        URL_PAGE: http://localhost:3000
+        URL_PAGE: http://localhost:3002
       run: |
         npm run build
         npm run start &
 
     - name: Wait for app
-      run: npx wait-on http://localhost:3000
+      run: npx wait-on http://localhost:3002
 
     - name: Lauch functionnal tests
       working-directory: ./frontend
