@@ -130,7 +130,20 @@ async function seedCards() {
       masked: false,
       image:
         "https://www.pokepedia.fr/images/thumb/8/8c/Carte_%C3%89carlate_et_Violet_Flammes_Obsidiennes_173.png/245px-Carte_%C3%89carlate_et_Violet_Flammes_Obsidiennes_173.png",
-      user: { connect: { id: 4 } },
+      user: { connect: { id: 5 } },
+    },
+  });
+
+  await prisma.card.create({
+    data: {
+      name: "Xerneas",
+      description: "Pokémon existence",
+      type: "Fée",
+      pv: 170,
+      masked: false,
+      image:
+        "https://assets.pokemon.com/static-assets/content-assets/cms2-fr-fr/img/cards/web/XY1/XY1_FR_146.png",
+      user: { connect: { id: 1 } },
     },
   });
 
@@ -206,22 +219,7 @@ async function seedTransactions() {
       receiverId: 1,
 
       cardsExchange: {
-        create: [{ cardId: 5 }],
-      },
-
-      cardsReceive: {
-        create: [{ cardId: 1 }],
-      },
-    },
-  });
-
-  await prisma.transaction.create({
-    data: {
-      proposerId: 4,
-      receiverId: 1,
-
-      cardsExchange: {
-        create: [{ cardId: 5 }],
+        create: [{ cardId: 7 }],
       },
 
       cardsReceive: {
@@ -240,22 +238,7 @@ async function seedTransactions() {
       },
 
       cardsReceive: {
-        create: [{ cardId: 1 }],
-      },
-    },
-  });
-
-  await prisma.transaction.create({
-    data: {
-      proposerId: 5,
-      receiverId: 1,
-
-      cardsExchange: {
-        create: [{ cardId: 8 }],
-      },
-
-      cardsReceive: {
-        create: [{ cardId: 1 }],
+        create: [{ cardId: 9 }],
       },
     },
   });

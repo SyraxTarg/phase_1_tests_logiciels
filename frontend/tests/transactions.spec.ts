@@ -39,11 +39,17 @@ test("accept transaction", async ({ page, browserName }) => {
     "Webkit a des problèmes de gestion de session en local",
   );
 
+  await page.goto(`${URL_PAGE}/profile/4`);
+  await expect(page.getByText("DracolosseDragonPokémon dragon")).toBeVisible();
+
+  await page.goto(`${URL_PAGE}/profile`);
+  await expect(page.getByText("PikachuElectricPokémon souris")).toBeVisible();
+
   await page.goto(`${URL_PAGE}/transactions`);
 
   const pendingTransactions = page.getByText(/Échange avec Iris.*pending/);
 
-  await expect(pendingTransactions).toHaveCount(2 - acceptTransactionRunCount);
+  await expect(pendingTransactions).toHaveCount(1 - acceptTransactionRunCount);
 
   const irisPendingCard = page
     .locator("div.rounded-2xl")
@@ -58,7 +64,7 @@ test("accept transaction", async ({ page, browserName }) => {
   await expect(acceptButton).toBeVisible();
   await acceptButton.click();
 
-  await expect(pendingTransactions).toHaveCount(1 - acceptTransactionRunCount, {
+  await expect(pendingTransactions).toHaveCount(0 - acceptTransactionRunCount, {
     timeout: 10000,
   });
 
@@ -71,6 +77,20 @@ test("accept transaction", async ({ page, browserName }) => {
     },
   );
 
+  await page.goto(`${URL_PAGE}/profile/4`);
+  await expect(
+    page.getByText("DracolosseDragonPokémon dragon"),
+  ).not.toBeVisible();
+  await expect(
+    page.getByText("PikachuElectricPokémon souris"),
+  ).not.toBeVisible();
+
+  await page.goto(`${URL_PAGE}/profile`);
+  await expect(
+    page.getByText("PikachuElectricPokémon souris"),
+  ).not.toBeVisible();
+  await expect(page.getByText("DracolosseDragonPokémon dragon")).toBeVisible();
+
   acceptTransactionRunCount++;
 });
 
@@ -82,11 +102,17 @@ test("reject transaction", async ({ page, browserName }) => {
     "Webkit a des problèmes de gestion de session en local",
   );
 
+  await page.goto(`${URL_PAGE}/profile/5`);
+  await expect(page.getByText("NanméouieNormalPokémon")).toBeVisible();
+
+  await page.goto(`${URL_PAGE}/profile`);
+  await expect(page.getByText("XerneasFéePokémon existence")).toBeVisible();
+
   await page.goto(`${URL_PAGE}/transactions`);
 
   const pendingTransactions = page.getByText(/Échange avec Joelle.*pending/);
 
-  await expect(pendingTransactions).toHaveCount(2 - rejectTransactionRunCount);
+  await expect(pendingTransactions).toHaveCount(1 - rejectTransactionRunCount);
 
   const joellePendingCard = page
     .locator("div.rounded-2xl")
@@ -101,7 +127,7 @@ test("reject transaction", async ({ page, browserName }) => {
   await expect(rejectButton).toBeVisible();
   await rejectButton.click();
 
-  await expect(pendingTransactions).toHaveCount(1 - rejectTransactionRunCount, {
+  await expect(pendingTransactions).toHaveCount(0 - rejectTransactionRunCount, {
     timeout: 10000,
   });
 
@@ -113,6 +139,14 @@ test("reject transaction", async ({ page, browserName }) => {
       timeout: 10000,
     },
   );
+
+  await page.goto(`${URL_PAGE}/profile/5`);
+  await expect(page.getByText("NanméouieNormalPokémon")).toBeVisible();
+  await expect(page.getByText("XerneasFéePokémon existence")).not.toBeVisible();
+
+  await page.goto(`${URL_PAGE}/profile`);
+  await expect(page.getByText("XerneasFéePokémon existence")).toBeVisible();
+  await expect(page.getByText("NanméouieNormalPokémon")).not.toBeVisible();
 
   rejectTransactionRunCount++;
 });
