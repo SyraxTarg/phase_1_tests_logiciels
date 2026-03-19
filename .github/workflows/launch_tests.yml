@@ -59,13 +59,13 @@ jobs:
         npx prisma generate
         node ./scripts/seed_db.js
 
-    - name: Launch backend
-      working-directory: ./back
-      env:
-        LISTEN_PORT: 3001
-        DATABASE_URL: file:./pokecenter.db
-        JWT_SECRET: secret
-      run: node index.js &
+    # - name: Launch backend
+    #   working-directory: ./back
+    #   env:
+    #     LISTEN_PORT: 3001
+    #     DATABASE_URL: file:./pokecenter.db
+    #     JWT_SECRET: secret
+    #   run: node index.js &
 
     # - name: Launch frontend
     #   working-directory: ./frontend
@@ -98,18 +98,42 @@ jobs:
     #     npx playwright install
     #     npx playwright test
 
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Run Playwright tests
+    # - name: Install Playwright Browsers
+    #   run: npx playwright install --with-deps
+    # - name: Run Playwright tests
+    #   working-directory: ./frontend
+    #   env:
+    #     API_URL: http://localhost:3001
+    #     URL_PAGE: http://localhost:3000
+    #   run: npx playwright test
+
+    # - uses: actions/upload-artifact@v4
+      # if: ${{ !cancelled() }}
+    #   with:
+    #     name: playwright-report
+    #     path: playwright-report/
+    #     retention-days: 30
+
+    - name: Launch Backend
+      working-directory: ./back
+      env:
+        DATABASE_URL: file:./pokecenter.db
+        JWT_SECRET: secret
+        LISTEN_PORT: 3001
+      run: npm start &
+
+    - name: Launch Frontend
       working-directory: ./frontend
       env:
         API_URL: http://localhost:3001
-        URL_PAGE: http://localhost:3000
-      run: npx playwright test
+      run: |
+        npm run build
+        npm run start &
 
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+    - name: Wait for front
+      run: |
+        npx wait-on http://localhost:3000 --timeout 60000
+
+    - name: Run Playwright tests
+      working-directory: ./frontend
+      run: npx playwright test
