@@ -1,7 +1,8 @@
+import React from "react";
 import { getCardsByUserId } from "@/src/lib/data";
 import { getCurrentUser } from "@/src/lib/auth";
 import Link from "next/link";
-import DeckEditor from "../components/DeckEditor";
+import DeckEditor from "@/src/app/components/DeckEditor";
 
 export default async function ProfilePage() {
   const currentUser = await getCurrentUser();
