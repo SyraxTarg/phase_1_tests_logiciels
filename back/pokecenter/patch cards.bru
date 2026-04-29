@@ -5,7 +5,13 @@ meta {
 }
 
 patch {
-  url: http://localhost:3000/cards/card_id
-  body: none
+  url: http://localhost:3087/cards/1
+  body: json
   auth: inherit
+}
+
+body:json {
+  {
+    "is_masked": true
+  }
 }
