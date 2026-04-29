@@ -1,4 +1,4 @@
-from locust import HttpUser, task, constant, events
+from locust import HttpUser, task, between, events
 import time
 import os
 from dotenv import load_dotenv
@@ -14,6 +14,7 @@ class MyUser(HttpUser):
         super().__init__(*args, **kwargs)
         self.token = None
         self.token_expiry = 0
+        wait_time = between(2,4)
 
     def get_token(self):
         """Obtain or refresh JWT token."""
@@ -49,10 +50,28 @@ class MyUser(HttpUser):
 
 
 @events.quitting.add_listener
-def _(environment, **kw):
-    if environment.stats.total.fail_ratio > 0.05:
-        print("Test échoué : Taux d'erreur > 5%")
-        environment.process_exit_code = 1
-    else:
-        print("Test réussi : Taux d'erreur dans les limites")
-        environment.process_exit_code = 0
+def check_fail_ratio(environment, **kw):
+    # On accède au Runner (c'est lui qui agrège tout en mode headless)
+    if environment.runner:
+        stats = environment.runner.stats.total
+        
+        # On recalcule manuellement pour être sûr
+        total = stats.num_requests
+        fails = stats.num_failures
+        
+        if total > 0:
+            actual_ratio = fails / total
+        else:
+            actual_ratio = 0
+
+        print(f"\n--- VÉRIFICATION FINALE DES STATISTIQUES ---")
+        print(f"Requêtes : {total} | Échecs : {fails}")
+        print(f"Taux d'échec réel : {actual_ratio:.2%}")
+
+        if actual_ratio > 0.05:
+            print(f"❌ TEST ÉCHOUÉ : {actual_ratio:.2%} > 5%")
+            # sys.exit(1) est radical mais garantit l'arrêt de la CI
+            environment.process_exit_code = 1
+        else:
+            print(f"✅ TEST RÉUSSI : {actual_ratio:.2%} <= 5%")
+            environment.process_exit_code = 0
