@@ -2,8 +2,7 @@ const bcrypt = require("bcrypt");
 const { PrismaClient } = require("@prisma/client");
 const { PrismaBetterSqlite3 } = require("@prisma/adapter-better-sqlite3");
 
-const DATABASE_URL = process.env["DATABASE_URL"]
-const adapter = new PrismaBetterSqlite3({ url: DATABASE_URL });
+const adapter = new PrismaBetterSqlite3({ url: "file:./pokecenter.db" });
 const prisma = new PrismaClient({ adapter });
 
 async function hashPassword(password) {
