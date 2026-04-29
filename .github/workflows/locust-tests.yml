@@ -103,25 +103,24 @@ jobs:
                   script: |
                       const fs = require('fs');
 
-                      // Read CSV results
-                      const stats = fs.readFileSync('back/results_stats.csv', 'utf8');
-                      const lines = stats.trim().split('\n');
-                      const headers = lines[0].split(',');
-                      const aggregated = lines[lines.length - 1].split(',');
+                        const stats = fs.readFileSync('back/results_stats.csv', 'utf8');
+                        const lines = stats.trim().split('\n');
+                        const aggregated = lines[lines.length - 1].split(',');
 
-                      // Build comment
-                      const comment = `## Load Test Results
+                        const requests = parseFloat(aggregated[2]);
+                        const failures = parseFloat(aggregated[3]);
+                        const actualFailRate = ((failures / requests) * 100).toFixed(2);
 
-                      | Metric | Value |
-                      |--------|-------|
-                      | Total Requests | ${aggregated[2]} |
-                      | Failure Rate | ${aggregated[4]}% |
-                      | Avg Response Time | ${aggregated[5]}ms |
-                      | P95 Response Time | ${aggregated[8]}ms |
-                      | Requests/sec | ${aggregated[9]} |
+                        const comment = `## Load Test Results
 
-                      [Full Report](../actions/runs/${context.runId})
-                      `;
+                        | Metric | Value |
+                        |--------|-------|
+                        | Total Requests | ${aggregated[2]} |
+                        | Failure Rate | ${actualFailRate}% |
+                        | Avg Response Time | ${parseFloat(aggregated[5]).toFixed(2)}ms |
+                        | P95 Response Time | ${aggregated[16]}ms |
+                        | Requests/sec | ${parseFloat(aggregated[9]).toFixed(2)} |
+                        `;
 
                       github.rest.issues.createComment({
                         issue_number: context.issue.number,
