@@ -27,8 +27,30 @@ jobs:
 
     - name: Launch unit tests
       working-directory: ./back
-      run: npm test
+      run: npm test unit
 
+
+  integration-tests-back:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: ['22.x']
+
+    steps:
+    - uses: actions/checkout@v5
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      working-directory: ./back
+      run: npm ci
+
+    - name: Launch integration tests
+      working-directory: ./back
+      run: npm test integration
 
   functional-tests-front:
     runs-on: ubuntu-latest
