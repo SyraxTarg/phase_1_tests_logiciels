@@ -1,8 +1,9 @@
+import React from "react";
 import { Card, User } from "@/src/lib/definitions";
 import { getCardsByUserId, getUserById } from "@/src/lib/data";
 import Link from "next/link";
 import { getCurrentUser } from "@/src/lib/auth";
-import TransactionModal from "../../components/TransactionModal";
+import TransactionModal from "@/src/app/components/TransactionModal";
 
 export default async function UserProfilePage({
   params,
