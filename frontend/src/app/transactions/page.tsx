@@ -1,3 +1,4 @@
+import React from "react";
 import { getTransactionsByProposer, getTransactionsByReceiver } from "@/src/lib/data";
 import TransactionsList from "../components/TransactionsList";
 import Link from "next/link";

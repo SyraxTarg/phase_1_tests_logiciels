@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useState, useRef } from "react";
 import { sendMessage } from "@/src/lib/actions";
 import { Message, User } from "@/src/lib/definitions";

@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useState } from "react";
 import { Card, TransactionContent } from "@/src/lib/definitions";
 import { createNewTransaction } from "@/src/lib/actions";
