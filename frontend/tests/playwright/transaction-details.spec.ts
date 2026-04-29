@@ -14,7 +14,7 @@ test("send message", async ({ page, browserName }) => {
   );
 
   await page.goto(`${URL_PAGE}/transactions/1`);
-
+  console.log(page.url())
   await page.getByRole("textbox", { name: "Écrivez votre message..." }).click();
   await page
     .getByRole("textbox", { name: "Écrivez votre message..." })

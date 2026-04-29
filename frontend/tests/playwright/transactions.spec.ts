@@ -14,7 +14,7 @@ test("send message", async ({ page, browserName }) => {
   );
 
   await page.goto(`${URL_PAGE}/transactions`);
-
+  console.log(page.url())
   await page
     .locator("#form-1")
     .getByRole("textbox", { name: "Écrire un message..." })

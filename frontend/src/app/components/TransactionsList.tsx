@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { patchTransactionStatus, sendMessage } from "@/src/lib/actions";
 import { Transaction, User } from "@/src/lib/definitions";
 import { useState } from "react";

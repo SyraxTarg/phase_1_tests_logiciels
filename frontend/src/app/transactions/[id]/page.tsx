@@ -1,3 +1,4 @@
+import React from "react";
 import { getTransactionById, getMessagesByTransaction } from "@/src/lib/data";
 import { getCurrentUser } from "@/src/lib/auth";
 import Link from "next/link";

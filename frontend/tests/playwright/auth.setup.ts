@@ -8,7 +8,7 @@ if (!URL_PAGE) {
     throw new Error("L'élément URL_PAGE n'est pas défini dans l'environnement.");
 }
 
-const authFile = path.join(__dirname, '../playwright/.auth/user.json');
+const authFile = 'playwright/.auth/user.json';
 
 setup('authenticate', async ({ page }) => {
     await page.goto(`${URL_PAGE}/login`);
