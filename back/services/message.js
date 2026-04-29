@@ -1,10 +1,11 @@
 const { PrismaClient } = require('@prisma/client');
 const { PrismaBetterSqlite3 } = require('@prisma/adapter-better-sqlite3');
 
-const prisma = new PrismaClient({
-  adapter: new PrismaBetterSqlite3({ url: 'file:./pokecenter.db' })
-});
+const DATABASE_URL = process.env["DATABASE_URL"]
 
+const prisma = new PrismaClient({
+  adapter: new PrismaBetterSqlite3({ url: DATABASE_URL })
+});
 
 async function findMessagesByTransaction(transactionId) {
   return prisma.message.findMany({

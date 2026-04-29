@@ -4,3 +4,5 @@ node_modules
 pokecenter.db
 coverage
 __pycache__
+.env.test
+pokecenter-test.db

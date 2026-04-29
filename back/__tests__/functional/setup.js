@@ -1,9 +1,10 @@
 const bcrypt = require("bcrypt");
 const { PrismaClient } = require("@prisma/client");
 const { PrismaBetterSqlite3 } = require("@prisma/adapter-better-sqlite3");
+const fs = require("fs");
+const path = require("path");
 
-const DATABASE_URL = process.env["DATABASE_URL"]
-const adapter = new PrismaBetterSqlite3({ url: DATABASE_URL });
+const adapter = new PrismaBetterSqlite3({ url: "file:./pokecenter-test.db" });
 const prisma = new PrismaClient({ adapter });
 
 async function hashPassword(password) {
@@ -16,7 +17,7 @@ async function seedUsers() {
   });
 
   await prisma.user.create({
-    data: { username: "Toto", password: await hashPassword("password456") },
+    data: { username: "Bob", password: await hashPassword("password456") },
   });
 
   await prisma.user.create({
@@ -247,4 +248,37 @@ async function seedTransactions() {
   console.log("Transactions et messages seedés !");
 }
 
-module.exports = { seedUsers, seedCards, seedTransactions };
+async function runSeeds() {
+  try {
+    await prisma.transactionCardExchange.deleteMany();
+    await prisma.transactionCardReceive.deleteMany();
+    await prisma.message.deleteMany();
+    await prisma.transaction.deleteMany();
+    await prisma.card.deleteMany();
+    await prisma.user.deleteMany();
+
+    await prisma.$executeRawUnsafe(`DELETE FROM sqlite_sequence WHERE name='User'`);
+    await prisma.$executeRawUnsafe(`DELETE FROM sqlite_sequence WHERE name='Card'`);
+    await prisma.$executeRawUnsafe(`DELETE FROM sqlite_sequence WHERE name='Transaction'`);
+    await prisma.$executeRawUnsafe(`DELETE FROM sqlite_sequence WHERE name='Message'`);
+
+    await seedUsers();
+    await seedCards();
+    await seedTransactions();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function clearDatabase() {
+    try{
+        await prisma.user.deleteMany().catch(() => console.log("Table User vide ou inexistante"));
+        await prisma.card.deleteMany().catch(() => console.log("Table User vide ou inexistante"));
+        await prisma.transaction.deleteMany().catch(() => console.log("Table User vide ou inexistante"));
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+module.exports = { runSeeds, clearDatabase };
+
