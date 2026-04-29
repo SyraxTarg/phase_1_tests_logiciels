@@ -91,7 +91,7 @@ const config = {
   // ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-  // moduleNameMapper: {},
+  moduleNameMapper: { "^@/(.*)$": "<rootDir>/$1" },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
@@ -165,7 +165,7 @@ const config = {
   testPathIgnorePatterns: [
     "\\\\node_modules\\\\",
     "<rootDir>/tests/playwright/",
-    "<rootDir>/e2e"
+    "<rootDir>/e2e",
   ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
