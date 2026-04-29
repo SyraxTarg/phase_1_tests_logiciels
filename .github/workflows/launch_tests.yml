@@ -27,7 +27,10 @@ jobs:
 
     - name: Launch unit tests
       working-directory: ./back
-      run: npm test unit
+      env:
+        DATABASE_URL: "file:./pokecenter-test.db"
+        JWT_SECRET: "change-me"
+      run: npm run test:ci unit
 
 
   unit-tests-front:
@@ -74,9 +77,16 @@ jobs:
       working-directory: ./back
       run: npm ci
 
+
     - name: Launch integration tests
       working-directory: ./back
-      run: npm test integration
+      env:
+        DATABASE_URL: "file:./pokecenter-test.db"
+        JWT_SECRET: "ci_secret_123"
+      run: |
+        npx prisma db push
+        npx prisma generate
+        npm run test:ci integration
 
   functional-tests-front:
     runs-on: ubuntu-latest
