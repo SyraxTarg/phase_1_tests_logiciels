@@ -1,4 +1,4 @@
-name: Lauch tests
+name: Launch tests
 
 on:
   push:
