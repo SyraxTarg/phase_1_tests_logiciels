@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "dotenv -e .env.test -- npx prisma db push && npx prisma generate && jest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +20,7 @@
     "jsonwebtoken": "^9.0.3"
   },
   "devDependencies": {
+    "dotenv-cli": "^11.0.0",
     "jest": "^30.3.0",
     "node-mocks-http": "^1.17.2",
     "prisma": "^7.4.1",

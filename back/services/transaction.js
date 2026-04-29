@@ -7,8 +7,10 @@ const {
   setMaskedCard
 } = require("./card")
 
+const DATABASE_URL = process.env["DATABASE_URL"]
+
 const prisma = new PrismaClient({
-  adapter: new PrismaBetterSqlite3({ url: 'file:./pokecenter.db' })
+  adapter: new PrismaBetterSqlite3({ url: DATABASE_URL })
 });
 
 async function createTransaction(proposerId, receiverId, proposerCardIds, receiverCardIds, messageContent) {
