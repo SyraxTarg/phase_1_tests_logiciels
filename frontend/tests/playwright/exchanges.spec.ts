@@ -12,6 +12,7 @@ test("exchange 1v1", async ({ page, browserName }) => {
 
     // Arrange
     await page.goto(`${URL_PAGE}/transactions`);
+    console.log(page.url())
     const initialCount = await page.getByText(/Échange avec Toto/).count();
 
     await page.goto(`${URL_PAGE}/profile/2`);

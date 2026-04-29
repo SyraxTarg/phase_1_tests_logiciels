@@ -11,6 +11,7 @@ test.use({ storageState: { cookies: [], origins: [] } });
 test("login successful", async ({ page }) => {
   // Arrange
   await page.goto(`${URL_PAGE}/login`);
+  console.log(page.url())
   const username_textbox = page.getByRole("textbox", { name: "Username" });
   const password_textbox = page.getByRole("textbox", { name: "Mot de passe" });
   const submit_button = page.getByRole("button", { name: "Se connecter" });

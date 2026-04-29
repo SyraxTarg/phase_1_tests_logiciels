@@ -39,7 +39,7 @@ async function seedCards() {
       description: "Pokémon souris",
       type: "Electric",
       pv: 70,
-      masked: true,
+      masked: false,
       image:
         "https://static.fnac-static.com/multimedia/Images/FR/MDM/b1/5c/25/19225777/3756-1/tsp20241106022234/Carte-a-collectionner-Pokemon-Carte-Promo-Go-1-Bonus-de-commande-ne-peut-etre-vendu-separement.jpg",
       user: { connect: { id: 1 } },

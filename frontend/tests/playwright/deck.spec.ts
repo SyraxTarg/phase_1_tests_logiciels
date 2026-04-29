@@ -7,23 +7,52 @@ if (!URL_PAGE) {
     throw new Error("L'élément URL_PAGE n'est pas défini dans l'environnement.");
 }
 
-test('trigger masked checkbox', async ({ page, browserName }) => {
+test.describe('Gestion de la visibilité des cartes', () => {
 
-    // test.skip(browserName === 'webkit', 'Webkit a des problèmes de gestion de session en local');
+    let stateBeforeTest: 'Visible' | 'Masquée' | null = null;
 
-    // Arrange
-    await page.goto(`${URL_PAGE}/profile`);
+    test('toggle visibility and cleanup', async ({ page }) => {
+        // Arrange
+        await page.goto(`${URL_PAGE}/profile`);
+        await page.waitForLoadState('networkidle');
 
-    const visible = page.getByText('Visible').first();
-    const masked = page.getByText('Masquée').first();
-    const isVisibleShown = await visible.isVisible().catch(() => false);
+        const visibleBtn = page.getByText('Visible').first();
+        const maskedBtn = page.getByText('Masquée').first();
 
-    // Act/Assert
-    if (isVisibleShown) {
-        await visible.click();
-        await expect(masked).toBeVisible({ timeout: 7000 });
-    } else {
-        await masked.click();
-        await expect(visible).toBeVisible({ timeout: 7000 });
-    }
+        if (await visibleBtn.isVisible()) {
+            stateBeforeTest = 'Visible';
+        } else if (await maskedBtn.isVisible()) {
+            stateBeforeTest = 'Masquée';
+        }
+
+        console.log(`État initial de la carte : ${stateBeforeTest}`);
+
+        // Act & Assert
+        if (stateBeforeTest === 'Visible') {
+            await visibleBtn.click();
+            await expect(maskedBtn).toBeVisible({ timeout: 7000 });
+        } else {
+            await maskedBtn.click();
+            await expect(visibleBtn).toBeVisible({ timeout: 7000 });
+        }
+    });
+
+    // Cleanup
+    test.afterEach(async ({ page }) => {
+        if (!stateBeforeTest) return;
+
+        console.log(`Nettoyage : Remise de la carte en état ${stateBeforeTest}`);
+
+        const currentVisibleBtn = page.getByText('Visible').first();
+        const currentMaskedBtn = page.getByText('Masquée').first();
+
+        if (stateBeforeTest === 'Visible' && await currentMaskedBtn.isVisible()) {
+            await currentMaskedBtn.click();
+            await expect(currentVisibleBtn).toBeVisible();
+        }
+        else if (stateBeforeTest === 'Masquée' && await currentVisibleBtn.isVisible()) {
+            await currentVisibleBtn.click();
+            await expect(currentMaskedBtn).toBeVisible();
+        }
+    });
 });
