@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { patchCardVisibility } from "@/src/lib/actions";
 import { Card } from "@/src/lib/definitions";
 import { useState } from "react";

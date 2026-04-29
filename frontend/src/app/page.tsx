@@ -1,3 +1,4 @@
+import React from "react";
 import { User } from "../lib/definitions";
 import { getAllUsers } from "../lib/data";
 import { getCurrentUser } from "@/src/lib/auth";
