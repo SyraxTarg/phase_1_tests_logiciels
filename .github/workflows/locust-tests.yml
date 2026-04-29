@@ -78,9 +78,9 @@ jobs:
                   locust \
                     --headless \
                     --host=$TARGET_HOST \
-                    --users=10\
-                    --spawn-rate=1 \
-                    --run-time=30 \
+                    --users=50\
+                    --spawn-rate=2 \
+                    --run-time=2m \
                     --csv=results \
                     --html=report.html \
                     --locustfile=__tests__/load/locustfile.py
