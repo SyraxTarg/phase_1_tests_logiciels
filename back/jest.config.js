@@ -9,7 +9,7 @@ const config = {
   coverageDirectory: 'coverage',
   testMatch: [
     '**/__tests__/unit/**/*.test.js',
-    '**/__tests__/functional/**/*.test.js',
+    '**/__tests__/integration/**/*.test.js',
   ],
   coveragePathIgnorePatterns: [
     '/node_modules/',
