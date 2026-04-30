@@ -11,6 +11,9 @@ Bienvenue sur **Poké Center**, un centre de troc moderne dédié aux passionné
 * 📩 **Demandes d’échange** : système de propositions et de validation
 * 📢 **Transactions avec messagerie** : communiquez par messages avec d'autres utilisateurs pour les échanges
 * 🧪 **Tests end-to-end** pour garantir la fiabilité de l’application
+* 🧪 **Tests unitaires** pour garantir la fiabilité de la logique métier
+* 🧪 **Tests d'intégration** pour garantir la fiabilité des modules d'un service
+* 🧪 **Tests de charge** pour garantir que l'application peut supporter suffisament de charge
 
 ---
 
@@ -28,6 +31,7 @@ Bienvenue sur **Poké Center**, un centre de troc moderne dédié aux passionné
 ### Tests
 
 * 🧪 **Playwright** - Tests E2E (Typescript)
+* 🧪 **Jest** - Tests Unitaires et d'integration
 
 ---
 
@@ -97,4 +101,16 @@ L’application sera accessible sur :
 ```bash
 cd frontend
 npx playwright test
+ou
+npm run tests
+```
+
+```bash
+cd back
+npm run tests
+```
+
+```bash
+cd back
+./scripts/use_locust.ps1
 ```
